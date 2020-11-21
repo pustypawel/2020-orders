@@ -1,7 +1,6 @@
 package pl.edu.wszib.order;
 
 import java.util.Collection;
-import java.util.List;
 
 public class OrderFacade {
     private final OrderRepository orderRepository;

@@ -2,21 +2,21 @@ package pl.edu.wszib.order;
 
 import java.util.Set;
 
-public class Order {
+class Order {
     private final String id;
-    private Set<Position> positions;
+    private final Set<Position> positions;
 
-    public Order(final String id,
-                 final Set<Position> positions) {
+    Order(final String id,
+          final Set<Position> positions) {
         this.id = id;
         this.positions = positions;
     }
 
-    public String getId() {
+    String getId() {
         return id;
     }
 
-    public Set<Position> getPositions() {
+    Set<Position> getPositions() {
         return positions;
     }
 }
