@@ -32,8 +32,7 @@ class OrderFacadeTest {
     @Test
     public void should_not_be_able_to_create_order_with_the_same_id() {
         // given: We have simple, correct order
-        final Order correctOrder = correctOrder();
-        orderFacade.create(correctOrder);
+        final Order correctOrder = createCorrectOrder();
         // and: We have another order which has the same id
         final Order orderWithTheSameId = orderWithTheSameId(correctOrder);
 
@@ -48,12 +47,26 @@ class OrderFacadeTest {
 
     @Test
     public void should_be_able_to_get_existing_order_by_id() {
-        fail();
+        // given: We have created correct order
+        String orderId = createCorrectOrder().getId();
+
+        // when: We try to get order by id
+        Order order = orderFacade.get(orderId);
+
+        // then: We should get order
+        assertNotNull(order);
     }
 
     @Test
     public void should_not_be_able_to_get_not_existing_order_by_id() {
-        fail();
+        // given: We have not existing order id
+        String notExistingOrderId = notExistingOrderId();
+
+        // when: We try to get order by id
+        Order order = orderFacade.get(notExistingOrderId);
+
+        // then: We should get no order
+        assertNull(order);
     }
 
     @Test
@@ -82,6 +95,16 @@ class OrderFacadeTest {
     public void should_be_able_to_submit_order() {
         // TODO: test, implementacja, wymyślić inne testy
         fail();
+    }
+
+    private Order createCorrectOrder() {
+        final Order correctOrder = correctOrder();
+        orderFacade.create(correctOrder);
+        return correctOrder;
+    }
+
+    private String notExistingOrderId() {
+        return "NOT_EXISTING_ORDER_ID";
     }
 
     private Order correctOrder() {
