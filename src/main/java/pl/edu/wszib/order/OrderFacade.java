@@ -26,6 +26,17 @@ public class OrderFacade {
         return OrderResult.OK;
     }
 
+    public OrderResult addPosition(final String orderId,
+                                   final Position position) {
+        final Order order = get(orderId);
+        if (order == null) {
+            return OrderResult.NOT_FOUND;
+        }
+        final Order orderWithPosition = order.addPosition(position);
+        orderRepository.save(orderWithPosition);
+        return OrderResult.OK;
+    }
+
     /**
      * @param id - should not be null
      * @return null if not found

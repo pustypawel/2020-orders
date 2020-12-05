@@ -3,24 +3,24 @@ package pl.edu.wszib.order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class OrderFacadeTest {
     private OrderFacade orderFacade;
 
+    private OrderHelper orderHelper;
+
     @BeforeEach
     void setUp() {
         final OrderRepository orderRepository = new OrderRepository();
         orderFacade = new OrderFacade(orderRepository);
+        orderHelper = new OrderHelper(orderFacade);
     }
 
     @Test
     public void should_be_able_to_create_order() {
         // given: We have simple, correct order
-        final Order correctOrder = correctOrder();
+        final Order correctOrder = OrderSamples.sampleOrder();
 
         // when: We try to create order
         final OrderResult result = orderFacade.create(correctOrder);
@@ -32,9 +32,9 @@ class OrderFacadeTest {
     @Test
     public void should_not_be_able_to_create_order_with_the_same_id() {
         // given: We have simple, correct order
-        final Order correctOrder = createCorrectOrder();
+        final String orderId = orderHelper.createCorrectOrder().getId();
         // and: We have another order which has the same id
-        final Order orderWithTheSameId = orderWithTheSameId(correctOrder);
+        final Order orderWithTheSameId = OrderSamples.sampleOrder2(orderId);
 
         // when: We try to create order with the same id
         OrderResult result = orderFacade.create(orderWithTheSameId);
@@ -48,7 +48,7 @@ class OrderFacadeTest {
     @Test
     public void should_be_able_to_get_existing_order_by_id() {
         // given: We have created correct order
-        String orderId = createCorrectOrder().getId();
+        String orderId = orderHelper.createCorrectOrder().getId();
 
         // when: We try to get order by id
         Order order = orderFacade.get(orderId);
@@ -62,7 +62,7 @@ class OrderFacadeTest {
     @Test
     public void should_not_be_able_to_get_not_existing_order_by_id() {
         // given: We have not existing order id
-        String notExistingOrderId = notExistingOrderId();
+        String notExistingOrderId = OrderSamples.notExistingOrderId();
 
         // when: We try to get order by id
         Order order = orderFacade.get(notExistingOrderId);
@@ -74,9 +74,9 @@ class OrderFacadeTest {
     @Test
     public void should_be_able_to_update_order() {
         // given: We have created correct order
-        String orderId = createCorrectOrder().getId();
+        String orderId = orderHelper.createCorrectOrder().getId();
         // and: We have modfied order
-        Order modifiedOrder = correctOrder2(orderId);
+        Order modifiedOrder = OrderSamples.sampleOrder2(orderId);
 
         // when: We try to update order
         OrderResult result = orderFacade.update(modifiedOrder);
@@ -87,8 +87,18 @@ class OrderFacadeTest {
 
     @Test
     public void should_be_able_to_add_position_to_order() {
-        // TODO: test, implementacja, wymyślić inne testy
-        fail();
+        // given: We have created correct order
+        String orderId = orderHelper.createCorrectOrder().getId();
+        // and: We have position to add
+        Position position = OrderSamples.samplePosition1();
+
+        // when: We try to add position to order
+        OrderResult result = orderFacade.addPosition(orderId, position);
+
+        // then: We should have success
+        assertTrue(result.isSuccess(), result::toString);
+        Order order = orderFacade.get(orderId);
+        assertTrue(order.containsPosition(position), order::toString);
     }
 
     @Test
@@ -103,30 +113,4 @@ class OrderFacadeTest {
         fail();
     }
 
-    private Order createCorrectOrder() {
-        final Order correctOrder = correctOrder();
-        orderFacade.create(correctOrder);
-        return correctOrder;
-    }
-
-    private String notExistingOrderId() {
-        return "NOT_EXISTING_ORDER_ID";
-    }
-
-    private Order correctOrder() {
-        return new Order("TEST_ORDER",
-                Set.of(new Position(1, 1, new Product("Test product", new BigDecimal("20.05")))));
-    }
-
-    private Order correctOrder2(String orderId) {
-        return new Order(orderId,
-                Set.of(new Position(1, 1, new Product("Test product", new BigDecimal("20.05"))),
-                        new Position(2, 5, new Product("Test product 2", new BigDecimal("10.05")))));
-    }
-
-    private Order orderWithTheSameId(Order order) {
-        String id = order.getId();
-        return new Order(id,
-                Set.of(new Position(1, 2, new Product("Test product", new BigDecimal("20.05")))));
-    }
 }
