@@ -75,7 +75,7 @@ class OrderFacadeTest {
     public void should_be_able_to_update_order() {
         // given: We have created correct order
         String orderId = orderHelper.createCorrectOrder().getId();
-        // and: We have modfied order
+        // and: We have modified order
         Order modifiedOrder = OrderSamples.sampleOrder2(orderId);
 
         // when: We try to update order
@@ -103,8 +103,19 @@ class OrderFacadeTest {
 
     @Test
     public void should_be_able_to_remove_position_from_order() {
-        // TODO: test, implementacja, wymyślić inne testy
-        fail();
+        // given: We have created correct order
+        Order createdOrder = orderHelper.createCorrectOrder();
+        String createdOrderId = createdOrder.getId();
+        // and: We have position to remove
+        Position position = createdOrder.getPositions().iterator().next();
+
+        // when: We try to add position to order
+        OrderResult result = orderFacade.removePosition(createdOrderId, position);
+
+        // then: We should have success
+        assertTrue(result.isSuccess(), result::toString);
+        Order order = orderFacade.get(createdOrderId);
+        assertTrue(order.notContainsPosition(position), order::toString);
     }
 
     @Test

@@ -37,6 +37,28 @@ public class OrderFacade {
         return OrderResult.OK;
     }
 
+    public OrderResult removePosition(final String orderId,
+                                      final Position position) {
+        final Order order = get(orderId);
+        if (order == null) {
+            return OrderResult.NOT_FOUND;
+        }
+        final Order orderWithPosition = order.removePosition(position);
+        orderRepository.save(orderWithPosition);
+        return OrderResult.OK;
+    }
+
+//    private OrderResult doWithOrder(final String orderId,
+//                                    final Function<Order, Order> changingFunction) {
+//        final Order order = get(orderId);
+//        if (order == null) {
+//            return OrderResult.NOT_FOUND;
+//        }
+//        Order changedOrder = changingFunction.apply(order);
+//        orderRepository.save(changedOrder);
+//        return OrderResult.OK;
+//    }
+
     /**
      * @param id - should not be null
      * @return null if not found

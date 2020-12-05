@@ -10,7 +10,7 @@ class Order {
 
     Order(final String id,
           final Set<Position> positions,
-          OrderStatus status) {
+          final OrderStatus status) {
         this.id = id;
         this.positions = positions;
         this.status = status;
@@ -30,7 +30,17 @@ class Order {
         return new Order(id, newPositions, status);
     }
 
+    Order removePosition(final Position position) {
+        final Set<Position> newPositions = new HashSet<>(this.positions);
+        newPositions.remove(position);
+        return new Order(id, newPositions, status);
+    }
+
     public boolean containsPosition(final Position position) {
         return positions.contains(position);
+    }
+
+    public boolean notContainsPosition(final Position position) {
+        return !positions.contains(position);
     }
 }
