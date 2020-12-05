@@ -1,6 +1,10 @@
 package pl.edu.wszib.order;
 
+import pl.edu.wszib.order.dto.OrderDto;
+import pl.edu.wszib.order.dto.PositionDto;
+
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class OrderFacade {
     private final OrderRepository orderRepository;
@@ -9,26 +13,28 @@ public class OrderFacade {
         this.orderRepository = orderRepository;
     }
 
-    public OrderResult create(final Order order) {
-        final String id = order.getId();
+    public OrderResult create(final OrderDto orderDto) {
+        final String id = orderDto.getId();
         if (orderRepository.exists(id)) {
             return OrderResult.ALREADY_EXIST;
         }
+        Order order = Order.create(orderDto);
         orderRepository.save(order);
         return OrderResult.OK;
     }
 
-    public OrderResult update(final Order order) {
-        if (!orderRepository.exists(order.getId())) {
+    public OrderResult update(final OrderDto orderDto) {
+        if (!orderRepository.exists(orderDto.getId())) {
             return OrderResult.NOT_FOUND;
         }
+        Order order = Order.create(orderDto);
         orderRepository.save(order);
         return OrderResult.OK;
     }
 
     public OrderResult addPosition(final String orderId,
-                                   final Position position) {
-        final Order order = get(orderId);
+                                   final PositionDto position) {
+        final Order order = orderRepository.get(orderId);
         if (order == null) {
             return OrderResult.NOT_FOUND;
         }
@@ -37,9 +43,10 @@ public class OrderFacade {
         return OrderResult.OK;
     }
 
+    // TODO usuwanie pozycji na podstawie jej numeru
     public OrderResult removePosition(final String orderId,
-                                      final Position position) {
-        final Order order = get(orderId);
+                                      final PositionDto position) {
+        final Order order = orderRepository.get(orderId);
         if (order == null) {
             return OrderResult.NOT_FOUND;
         }
@@ -49,7 +56,7 @@ public class OrderFacade {
     }
 
     public OrderResult submit(final String orderId) {
-        final Order order = get(orderId);
+        final Order order = orderRepository.get(orderId);
         if (order == null) {
             return OrderResult.NOT_FOUND;
         }
@@ -62,12 +69,16 @@ public class OrderFacade {
      * @param id - should not be null
      * @return null if not found
      */
-    public Order get(final String id) {
-        return orderRepository.get(id);
+    public OrderDto get(final String id) {
+        Order order = orderRepository.get(id);
+        return order == null ? null : order.toDto();
     }
 
-    public Collection<Order> getAll() {
-        return orderRepository.getAll();
+    public Collection<OrderDto> getAll() {
+        return orderRepository.getAll()
+                .stream()
+                .map(Order::toDto)
+                .collect(Collectors.toList());
     }
 
 // Przykład uogólnienia kodu przy użyciu funkcyjnego api

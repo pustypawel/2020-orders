@@ -1,5 +1,9 @@
 package pl.edu.wszib.order;
 
+import pl.edu.wszib.order.dto.OrderDto;
+import pl.edu.wszib.order.dto.PositionDto;
+import pl.edu.wszib.order.dto.ProductDto;
+
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -8,24 +12,24 @@ public class OrderSamples {
         return "NOT_EXISTING_ORDER_ID";
     }
 
-    public static Order sampleOrder() {
-        return new Order("TEST_ORDER", samplePositions(), OrderStatus.DRAFT);
+    public static OrderDto sampleOrder() {
+        return new OrderDto("TEST_ORDER", samplePositions(), OrderStatus.DRAFT);
     }
 
-    public static Order sampleOrder2(String orderId) {
-        return new Order(orderId,
+    public static OrderDto sampleOrder2(String orderId) {
+        return new OrderDto(orderId,
                 Set.of(samplePosition1(), samplePosition2()), OrderStatus.DRAFT);
     }
 
-    static Set<Position> samplePositions() {
+    static Set<PositionDto> samplePositions() {
         return Set.of(samplePosition1());
     }
 
-    static Position samplePosition1() {
-        return new Position(1, 2, new Product("Test product", new BigDecimal("20.05")));
+    static PositionDto samplePosition1() {
+        return new PositionDto(1, 2, new ProductDto("Test product", new BigDecimal("20.05")));
     }
 
-    static Position samplePosition2() {
-        return new Position(2, 5, new Product("Test product 2", new BigDecimal("10.05")));
+    static PositionDto samplePosition2() {
+        return new PositionDto(2, 5, new ProductDto("Test product 2", new BigDecimal("10.05")));
     }
 }

@@ -1,5 +1,8 @@
 package pl.edu.wszib.order;
 
+import pl.edu.wszib.order.dto.OrderDto;
+import pl.edu.wszib.order.dto.PositionDto;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,23 +19,29 @@ class Order {
         this.status = status;
     }
 
+    static Order create(OrderDto orderDto) {
+        return new Order(orderDto.getId(),
+                Position.create(orderDto.getPositions()),
+                orderDto.getStatus());
+    }
+
+    OrderDto toDto() {
+        return new OrderDto(id, Position.toDto(positions), status);
+    }
+
     String getId() {
         return id;
     }
 
-    Set<Position> getPositions() {
-        return positions;
-    }
-
-    Order addPosition(final Position position) {
+    Order addPosition(final PositionDto position) {
         final Set<Position> newPositions = new HashSet<>(this.positions);
-        newPositions.add(position);
+        newPositions.add(Position.create(position));
         return new Order(id, newPositions, status);
     }
 
-    Order removePosition(final Position position) {
+    Order removePosition(final PositionDto position) {
         final Set<Position> newPositions = new HashSet<>(this.positions);
-        newPositions.remove(position);
+        newPositions.remove(Position.create(position));
         return new Order(id, newPositions, status);
     }
 
@@ -40,11 +49,4 @@ class Order {
         return new Order(this.id, this.positions, OrderStatus.SUBMITTED);
     }
 
-    public boolean containsPosition(final Position position) {
-        return positions.contains(position);
-    }
-
-    public boolean notContainsPosition(final Position position) {
-        return !positions.contains(position);
-    }
 }

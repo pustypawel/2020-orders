@@ -2,6 +2,8 @@ package pl.edu.wszib.order;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pl.edu.wszib.order.dto.OrderDto;
+import pl.edu.wszib.order.dto.PositionDto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +22,7 @@ class OrderFacadeTest {
     @Test
     public void should_be_able_to_create_order() {
         // given: We have simple, correct order
-        final Order correctOrder = OrderSamples.sampleOrder();
+        final OrderDto correctOrder = OrderSamples.sampleOrder();
 
         // when: We try to create order
         final OrderResult result = orderFacade.create(correctOrder);
@@ -34,7 +36,7 @@ class OrderFacadeTest {
         // given: We have simple, correct order
         final String orderId = orderHelper.createCorrectOrder().getId();
         // and: We have another order which has the same id
-        final Order orderWithTheSameId = OrderSamples.sampleOrder2(orderId);
+        final OrderDto orderWithTheSameId = OrderSamples.sampleOrder2(orderId);
 
         // when: We try to create order with the same id
         OrderResult result = orderFacade.create(orderWithTheSameId);
@@ -51,7 +53,7 @@ class OrderFacadeTest {
         String orderId = orderHelper.createCorrectOrder().getId();
 
         // when: We try to get order by id
-        Order order = orderFacade.get(orderId);
+        OrderDto order = orderFacade.get(orderId);
 
         // then: We should get order
         assertNotNull(order);
@@ -65,7 +67,7 @@ class OrderFacadeTest {
         String notExistingOrderId = OrderSamples.notExistingOrderId();
 
         // when: We try to get order by id
-        Order order = orderFacade.get(notExistingOrderId);
+        OrderDto order = orderFacade.get(notExistingOrderId);
 
         // then: We should get no order
         assertNull(order);
@@ -76,7 +78,7 @@ class OrderFacadeTest {
         // given: We have created correct order
         String orderId = orderHelper.createCorrectOrder().getId();
         // and: We have modified order
-        Order modifiedOrder = OrderSamples.sampleOrder2(orderId);
+        OrderDto modifiedOrder = OrderSamples.sampleOrder2(orderId);
 
         // when: We try to update order
         OrderResult result = orderFacade.update(modifiedOrder);
@@ -90,32 +92,32 @@ class OrderFacadeTest {
         // given: We have created correct order
         String orderId = orderHelper.createCorrectOrder().getId();
         // and: We have position to add
-        Position position = OrderSamples.samplePosition1();
+        PositionDto position = OrderSamples.samplePosition1();
 
         // when: We try to add position to order
         OrderResult result = orderFacade.addPosition(orderId, position);
 
         // then: We should have success
         assertTrue(result.isSuccess(), result::toString);
-        Order order = orderFacade.get(orderId);
-        assertTrue(order.containsPosition(position), order::toString);
+        OrderDto order = orderFacade.get(orderId);
+        assertTrue(containsPosition(order, position), order::toString);
     }
 
     @Test
     public void should_be_able_to_remove_position_from_order() {
         // given: We have created correct order
-        Order createdOrder = orderHelper.createCorrectOrder();
+        OrderDto createdOrder = orderHelper.createCorrectOrder();
         String createdOrderId = createdOrder.getId();
         // and: We have position to remove
-        Position position = createdOrder.getPositions().iterator().next();
+        PositionDto position = createdOrder.getPositions().iterator().next();
 
         // when: We try to remove position to order
         OrderResult result = orderFacade.removePosition(createdOrderId, position);
 
         // then: We should have success
         assertTrue(result.isSuccess(), result::toString);
-        Order order = orderFacade.get(createdOrderId);
-        assertTrue(order.notContainsPosition(position), order::toString);
+        OrderDto order = orderFacade.get(createdOrderId);
+        assertTrue(notContainsPosition(order, position), order::toString);
     }
 
     @Test
@@ -128,6 +130,16 @@ class OrderFacadeTest {
 
         // then: We should have success
         assertTrue(result.isSuccess(), result::toString);
+    }
+
+    private boolean notContainsPosition(OrderDto order,
+                                        PositionDto position) {
+        return !containsPosition(order, position);
+    }
+
+    private boolean containsPosition(OrderDto order,
+                                     PositionDto position) {
+        return order.getPositions().contains(position);
     }
 
 }

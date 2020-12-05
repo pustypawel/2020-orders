@@ -1,5 +1,7 @@
 package pl.edu.wszib.order;
 
+import pl.edu.wszib.order.dto.OrderDto;
+
 public class OrderHelper {
     private final OrderFacade orderFacade;
 
@@ -7,8 +9,8 @@ public class OrderHelper {
         this.orderFacade = orderFacade;
     }
 
-    public Order createCorrectOrder() {
-        final Order correctOrder = OrderSamples.sampleOrder();
+    public OrderDto createCorrectOrder() {
+        final OrderDto correctOrder = OrderSamples.sampleOrder();
         orderFacade.create(correctOrder);
         return correctOrder;
     }
