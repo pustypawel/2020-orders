@@ -57,17 +57,6 @@ public class OrderFacade {
         orderRepository.save(orderSubmitted);
         return OrderResult.OK;
     }
-//    private OrderResult doWithOrder(final String orderId,
-//                                    final Function<Order, Order> changingFunction) {
-//        final Order order = get(orderId);
-//        if (order == null) {
-//            return OrderResult.NOT_FOUND;
-//        }
-//        Order changedOrder = changingFunction.apply(order);
-//        orderRepository.save(changedOrder);
-//        return OrderResult.OK;
-
-//    }
 
     /**
      * @param id - should not be null
@@ -80,4 +69,17 @@ public class OrderFacade {
     public Collection<Order> getAll() {
         return orderRepository.getAll();
     }
+
+// Przykład uogólnienia kodu przy użyciu funkcyjnego api
+//    private OrderResult doWithOrder(final String orderId,
+//                                    final Function<Order, Order> changingFunction) {
+//        final Order order = get(orderId);
+//        if (order == null) {
+//            return OrderResult.NOT_FOUND;
+//        }
+//        Order changedOrder = changingFunction.apply(order);
+//        orderRepository.save(changedOrder);
+//        return OrderResult.OK;
+
+//    }
 }

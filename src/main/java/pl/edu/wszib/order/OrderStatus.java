@@ -1,6 +1,6 @@
 package pl.edu.wszib.order;
 
-enum  OrderStatus {
+public enum OrderStatus {
     DRAFT,
     SUBMITTED,
 }
