@@ -55,6 +55,8 @@ class OrderFacadeTest {
 
         // then: We should get order
         assertNotNull(order);
+        // and: Id should be the same
+        assertEquals(orderId, order.getId());
     }
 
     @Test
