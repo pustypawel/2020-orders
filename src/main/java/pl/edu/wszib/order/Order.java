@@ -36,6 +36,10 @@ class Order {
         return new Order(id, newPositions, status);
     }
 
+    Order submit() {
+        return new Order(this.id, this.positions, OrderStatus.SUBMITTED);
+    }
+
     public boolean containsPosition(final Position position) {
         return positions.contains(position);
     }

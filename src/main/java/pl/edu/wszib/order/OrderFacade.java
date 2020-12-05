@@ -48,6 +48,15 @@ public class OrderFacade {
         return OrderResult.OK;
     }
 
+    public OrderResult submit(final String orderId) {
+        final Order order = get(orderId);
+        if (order == null) {
+            return OrderResult.NOT_FOUND;
+        }
+        final Order orderSubmitted = order.submit();
+        orderRepository.save(orderSubmitted);
+        return OrderResult.OK;
+    }
 //    private OrderResult doWithOrder(final String orderId,
 //                                    final Function<Order, Order> changingFunction) {
 //        final Order order = get(orderId);
@@ -57,6 +66,7 @@ public class OrderFacade {
 //        Order changedOrder = changingFunction.apply(order);
 //        orderRepository.save(changedOrder);
 //        return OrderResult.OK;
+
 //    }
 
     /**

@@ -109,7 +109,7 @@ class OrderFacadeTest {
         // and: We have position to remove
         Position position = createdOrder.getPositions().iterator().next();
 
-        // when: We try to add position to order
+        // when: We try to remove position to order
         OrderResult result = orderFacade.removePosition(createdOrderId, position);
 
         // then: We should have success
@@ -120,8 +120,14 @@ class OrderFacadeTest {
 
     @Test
     public void should_be_able_to_submit_order() {
-        // TODO: test, implementacja, wymyślić inne testy
-        fail();
+        // given: We have created correct order
+        String orderId = orderHelper.createCorrectOrder().getId();
+
+        // when: We try to submit
+        OrderResult result = orderFacade.submit(orderId);
+
+        // then: We should have success
+        assertTrue(result.isSuccess(), result::toString);
     }
 
 }
