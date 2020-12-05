@@ -19,7 +19,7 @@ public class OrderFacade {
     }
 
     public OrderResult update(final Order order) {
-        if (orderRepository.exists(order.getId())) {
+        if (!orderRepository.exists(order.getId())) {
             return OrderResult.NOT_FOUND;
         }
         orderRepository.save(order);

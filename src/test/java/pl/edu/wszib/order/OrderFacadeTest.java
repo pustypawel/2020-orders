@@ -73,12 +73,16 @@ class OrderFacadeTest {
 
     @Test
     public void should_be_able_to_update_order() {
-        fail();
-    }
+        // given: We have created correct order
+        String orderId = createCorrectOrder().getId();
+        // and: We have modfied order
+        Order modifiedOrder = correctOrder2(orderId);
 
-    @Test
-    public void should_not_be_able_to_update_not_existing_order() {
-        fail();
+        // when: We try to update order
+        OrderResult result = orderFacade.update(modifiedOrder);
+
+        // then: We should have success
+        assertTrue(result.isSuccess(), result::toString);
     }
 
     @Test
@@ -112,6 +116,12 @@ class OrderFacadeTest {
     private Order correctOrder() {
         return new Order("TEST_ORDER",
                 Set.of(new Position(1, 1, new Product("Test product", new BigDecimal("20.05")))));
+    }
+
+    private Order correctOrder2(String orderId) {
+        return new Order(orderId,
+                Set.of(new Position(1, 1, new Product("Test product", new BigDecimal("20.05"))),
+                        new Position(2, 5, new Product("Test product 2", new BigDecimal("10.05")))));
     }
 
     private Order orderWithTheSameId(Order order) {
