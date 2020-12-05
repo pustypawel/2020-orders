@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 class OrderFacadeTest {
     private OrderFacade orderFacade;
@@ -32,7 +31,19 @@ class OrderFacadeTest {
 
     @Test
     public void should_not_be_able_to_create_order_with_the_same_id() {
-        fail();
+        // given: We have simple, correct order
+        final Order correctOrder = correctOrder();
+        orderFacade.create(correctOrder);
+        // and: We have another order which has the same id
+        final Order orderWithTheSameId = orderWithTheSameId(correctOrder);
+
+        // when: We try to create order with the same id
+        OrderResult result = orderFacade.create(orderWithTheSameId);
+
+        // then: Order should not be created
+        assertTrue(result.isFailure());
+        // and: the failure reason should be ALREADY_EXIST
+        assertEquals(OrderResult.ALREADY_EXIST, result);
     }
 
     @Test
@@ -76,5 +87,11 @@ class OrderFacadeTest {
     private Order correctOrder() {
         return new Order("TEST_ORDER",
                 Set.of(new Position(1, 1, new Product("Test product", new BigDecimal("20.05")))));
+    }
+
+    private Order orderWithTheSameId(Order order) {
+        String id = order.getId();
+        return new Order(id,
+                Set.of(new Position(1, 2, new Product("Test product", new BigDecimal("20.05")))));
     }
 }
