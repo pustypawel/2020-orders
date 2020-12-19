@@ -132,6 +132,26 @@ class OrderFacadeTest {
         assertTrue(result.isSuccess(), result::toString);
     }
 
+    // test: zamówienie zatwierdzone nie może być modyfikowane
+
+    @Test
+    public void should_not_be_able_to_modify_submitted_order() {
+        // given: We have submitted order
+        String orderId = orderHelper.createSubmittedOrder();
+
+        // when: Wy try to modify order
+        OrderResult addPositionResult = orderFacade.addPosition(orderId, OrderSamples.samplePosition1());
+//        OrderResult removePositionResult = orderFacade.removePosition(orderId, /* TODO IMPL 8*/ null);
+//        OrderResult updateResult = orderFacade.update(/*TODO IMPL */ null);
+        OrderResult submitResult = orderFacade.submit(orderId);
+
+        // then: All modifying operations should fail
+        assertTrue(addPositionResult.isFailure());
+//        assertTrue(removePositionResult.isFailure());
+//        assertTrue(updateResult.isFailure());
+        assertTrue(submitResult.isFailure());
+    }
+
     private boolean notContainsPosition(OrderDto order,
                                         PositionDto position) {
         return !containsPosition(order, position);

@@ -11,7 +11,20 @@ public class OrderHelper {
 
     public OrderDto createCorrectOrder() {
         final OrderDto correctOrder = OrderSamples.sampleOrder();
-        orderFacade.create(correctOrder);
+        final OrderResult result = orderFacade.create(correctOrder);
+        if (result.isFailure()) {
+            throw new IllegalStateException("Failure = " + result);
+        }
         return correctOrder;
+    }
+
+    // TODO REFACTOR - zwracać OrderDto
+    public String createSubmittedOrder() {
+        final String orderId = createCorrectOrder().getId();
+        final OrderResult result = orderFacade.submit(orderId);
+        if (result.isFailure()) {
+            throw new IllegalStateException("Failure = " + result);
+        }
+        return orderId;
     }
 }
