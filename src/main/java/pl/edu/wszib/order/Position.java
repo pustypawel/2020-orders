@@ -3,6 +3,7 @@ package pl.edu.wszib.order;
 import lombok.EqualsAndHashCode;
 import pl.edu.wszib.order.dto.PositionDto;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,10 @@ class Position {
         return positions.stream()
                 .map(Position::create)
                 .collect(Collectors.toSet());
+    }
+
+    boolean hasNumber(Position position) {
+        return Objects.equals(this.number, position.number);
     }
 
     PositionDto toDto() {

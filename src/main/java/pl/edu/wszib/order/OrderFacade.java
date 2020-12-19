@@ -52,12 +52,12 @@ public class OrderFacade {
 
     // TODO usuwanie pozycji na podstawie jej numeru
     public OrderResult removePosition(final String orderId,
-                                      final PositionDto position) {
+                                      final Integer positionNumber) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
             return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
-        final OrderDomainResult removePositionResult = order.removePosition(position);
+        final OrderDomainResult removePositionResult = order.removePosition(positionNumber);
         if (removePositionResult.isFailure()) {
             return OrderResult.failure(removePositionResult.getType());
         }

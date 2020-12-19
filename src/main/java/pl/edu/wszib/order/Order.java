@@ -49,12 +49,19 @@ class Order {
         return OrderDomainResult.success(new Order(id, newPositions, status));
     }
 
-    OrderDomainResult removePosition(final PositionDto position) {
+    OrderDomainResult removePosition(final Integer positionNumber) {
         if (status == OrderStatus.SUBMITTED) {
             return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
         }
+        final Position positionToRemove = this.positions.stream()
+                .filter(position -> position.hasNumber(position))
+                .findFirst()
+                .orElse(null);  // TODO obsłużyć
+        if (positionToRemove == null) {
+            return OrderDomainResult.failure(OrderResultType.POSITION_NOT_FOUND);
+        }
         final Set<Position> newPositions = new HashSet<>(this.positions);
-        newPositions.remove(Position.create(position));
+        newPositions.remove(positionToRemove);
         return OrderDomainResult.success(new Order(id, newPositions, status));
     }
 
