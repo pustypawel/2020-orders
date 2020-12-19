@@ -16,31 +16,31 @@ public class OrderFacade {
     public OrderResult create(final OrderDto orderDto) {
         final String id = orderDto.getId();
         if (orderRepository.exists(id)) {
-            return OrderResult.ALREADY_EXIST;
+            return OrderResult.failure(OrderResult.Type.ALREADY_EXIST);
         }
         Order order = Order.create(orderDto);
         orderRepository.save(order);
-        return OrderResult.OK;
+        return OrderResult.success(order.toDto());
     }
 
     public OrderResult update(final OrderDto orderDto) {
         if (!orderRepository.exists(orderDto.getId())) {
-            return OrderResult.NOT_FOUND;
+            return OrderResult.failure(OrderResult.Type.NOT_FOUND);
         }
         Order order = Order.create(orderDto);
         orderRepository.save(order);
-        return OrderResult.OK;
+        return OrderResult.success(order.toDto());
     }
 
     public OrderResult addPosition(final String orderId,
                                    final PositionDto position) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.NOT_FOUND;
+            return OrderResult.failure(OrderResult.Type.NOT_FOUND);
         }
         final Order orderWithPosition = order.addPosition(position);
         orderRepository.save(orderWithPosition);
-        return OrderResult.OK;
+        return OrderResult.success(order.toDto());
     }
 
     // TODO usuwanie pozycji na podstawie jej numeru
@@ -48,21 +48,21 @@ public class OrderFacade {
                                       final PositionDto position) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.NOT_FOUND;
+            return OrderResult.failure(OrderResult.Type.NOT_FOUND);
         }
         final Order orderWithPosition = order.removePosition(position);
         orderRepository.save(orderWithPosition);
-        return OrderResult.OK;
+        return OrderResult.success(order.toDto());
     }
 
     public OrderResult submit(final String orderId) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.NOT_FOUND;
+            return OrderResult.failure(OrderResult.Type.NOT_FOUND);
         }
         final Order orderSubmitted = order.submit();
         orderRepository.save(orderSubmitted);
-        return OrderResult.OK;
+        return OrderResult.success(order.toDto());
     }
 
     /**
@@ -81,16 +81,4 @@ public class OrderFacade {
                 .collect(Collectors.toList());
     }
 
-// Przykład uogólnienia kodu przy użyciu funkcyjnego api
-//    private OrderResult doWithOrder(final String orderId,
-//                                    final Function<Order, Order> changingFunction) {
-//        final Order order = get(orderId);
-//        if (order == null) {
-//            return OrderResult.NOT_FOUND;
-//        }
-//        Order changedOrder = changingFunction.apply(order);
-//        orderRepository.save(changedOrder);
-//        return OrderResult.OK;
-
-//    }
 }

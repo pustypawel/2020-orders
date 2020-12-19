@@ -1,14 +1,33 @@
 package pl.edu.wszib.order;
 
-public enum OrderResult {
-    OK,
+import lombok.Value;
+import pl.edu.wszib.order.dto.OrderDto;
 
-    ALREADY_EXIST,
+@Value
+public class OrderResult {
+    Type type;
+    OrderDto order;
 
-    NOT_FOUND;
+    public static OrderResult failure(Type type) {
+        if (type == Type.OK) {
+            throw new IllegalArgumentException("type can't be " + Type.OK);
+        }
+        return new OrderResult(type, null);
+    }
+
+    public static OrderResult success(OrderDto order) {
+        return new OrderResult(Type.OK, order);
+    }
+
+    public enum Type {
+        OK,
+        ALREADY_EXIST,
+        NOT_FOUND;
+
+    }
 
     public boolean isSuccess() {
-        return this == OK;
+        return type == Type.OK;
     }
 
     public boolean isFailure() {
