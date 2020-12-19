@@ -44,7 +44,7 @@ class OrderFacadeTest {
         // then: Order should not be created
         assertTrue(result.isFailure());
         // and: the failure reason should be ALREADY_EXIST
-        assertEquals(OrderResult.Type.ALREADY_EXIST, result.getType());
+        assertEquals(OrderResultType.ALREADY_EXIST, result.getType());
     }
 
     @Test

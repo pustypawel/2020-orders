@@ -16,7 +16,7 @@ public class OrderFacade {
     public OrderResult create(final OrderDto orderDto) {
         final String id = orderDto.getId();
         if (orderRepository.exists(id)) {
-            return OrderResult.failure(OrderResult.Type.ALREADY_EXIST);
+            return OrderResult.failure(OrderResultType.ALREADY_EXIST);
         }
         Order order = Order.create(orderDto);
         orderRepository.save(order);
@@ -25,7 +25,7 @@ public class OrderFacade {
 
     public OrderResult update(final OrderDto orderDto) {
         if (!orderRepository.exists(orderDto.getId())) {
-            return OrderResult.failure(OrderResult.Type.NOT_FOUND);
+            return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
         Order order = Order.create(orderDto);
         orderRepository.save(order);
@@ -36,7 +36,7 @@ public class OrderFacade {
                                    final PositionDto position) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.failure(OrderResult.Type.NOT_FOUND);
+            return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
         final Order orderWithPosition = order.addPosition(position);
         orderRepository.save(orderWithPosition);
@@ -48,7 +48,7 @@ public class OrderFacade {
                                       final PositionDto position) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.failure(OrderResult.Type.NOT_FOUND);
+            return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
         final Order orderWithPosition = order.removePosition(position);
         orderRepository.save(orderWithPosition);
@@ -58,7 +58,7 @@ public class OrderFacade {
     public OrderResult submit(final String orderId) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.failure(OrderResult.Type.NOT_FOUND);
+            return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
         final Order orderSubmitted = order.submit();
         orderRepository.save(orderSubmitted);

@@ -4,9 +4,9 @@ import lombok.Value;
 import pl.edu.wszib.order.dto.OrderDto;
 
 @Value
-public class OrderResult {
+class OrderDomainResult {
     OrderResultType type;
-    OrderDto order;
+    Order order;
 
     public static OrderResult failure(OrderResultType type) {
         if (type == OrderResultType.OK) {
@@ -18,7 +18,7 @@ public class OrderResult {
     public static OrderResult success(OrderDto order) {
         return new OrderResult(OrderResultType.OK, order);
     }
-
+    
     public boolean isSuccess() {
         return type == OrderResultType.OK;
     }
