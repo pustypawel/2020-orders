@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 // TODO przenumerowanie numerów pozycji po usunięciu np ze środka
@@ -16,7 +20,9 @@ class OrderFacadeTest {
     @BeforeEach
     void setUp() {
         final OrderRepository orderRepository = new OrderRepository();
-        orderFacade = new OrderFacade(orderRepository);
+        final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        final Validator validator = validatorFactory.getValidator();
+        orderFacade = new OrderFacade(validator, orderRepository);
         orderHelper = new OrderHelper(orderFacade);
     }
 

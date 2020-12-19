@@ -1,19 +1,25 @@
 package pl.edu.wszib.order;
 
+import lombok.AllArgsConstructor;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class OrderFacade {
+    private final Validator validator;
     private final OrderRepository orderRepository;
 
-    public OrderFacade(final OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
-
     public OrderResult create(final OrderDto orderDto) {
+        final Set<ConstraintViolation<OrderDto>> violations = validator.validate(orderDto);
+        if (violations.isEmpty()) {
+            throw new IllegalArgumentException("Invalid order" + violations.toString());
+        }
         final String id = orderDto.getId();
         if (orderRepository.exists(id)) {
             return OrderResult.failure(OrderResultType.ALREADY_EXIST);
@@ -24,6 +30,10 @@ public class OrderFacade {
     }
 
     public OrderResult update(final OrderDto orderDto) {
+        final Set<ConstraintViolation<OrderDto>> violations = validator.validate(orderDto);
+        if (violations.isEmpty()) {
+            throw new IllegalArgumentException("Invalid order" + violations.toString());
+        }
         Order order = orderRepository.get(orderDto.getId());
         if (order == null) {
             return OrderResult.failure(OrderResultType.NOT_FOUND);
@@ -38,6 +48,10 @@ public class OrderFacade {
 
     public OrderResult addPosition(final String orderId,
                                    final PositionDto position) {
+        final Set<ConstraintViolation<PositionDto>> violations = validator.validate(position);
+        if (violations.isEmpty()) {
+            throw new IllegalArgumentException("Invalid position" + violations.toString());
+        }
         final Order order = orderRepository.get(orderId);
         if (order == null) {
             return OrderResult.failure(OrderResultType.NOT_FOUND);
@@ -50,7 +64,6 @@ public class OrderFacade {
         return OrderResult.success(order.toDto());
     }
 
-    // TODO usuwanie pozycji na podstawie jej numeru
     public OrderResult removePosition(final String orderId,
                                       final Integer positionNumber) {
         final Order order = orderRepository.get(orderId);
