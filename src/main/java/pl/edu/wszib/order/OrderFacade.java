@@ -24,11 +24,15 @@ public class OrderFacade {
     }
 
     public OrderResult update(final OrderDto orderDto) {
-        if (!orderRepository.exists(orderDto.getId())) {
+        Order order = orderRepository.get(orderDto.getId());
+        if (order == null) {
             return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
-        Order order = Order.create(orderDto);
-        orderRepository.save(order);
+        OrderDomainResult updateResult = order.update(orderDto);
+        if (updateResult.isFailure()) {
+            return OrderResult.failure(updateResult.getType());
+        }
+        orderRepository.save(updateResult.getOrder());
         return OrderResult.success(order.toDto());
     }
 
@@ -38,8 +42,11 @@ public class OrderFacade {
         if (order == null) {
             return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
-        final Order orderWithPosition = order.addPosition(position);
-        orderRepository.save(orderWithPosition);
+        final OrderDomainResult addPositionResult = order.addPosition(position);
+        if (addPositionResult.isFailure()) {
+            return OrderResult.failure(addPositionResult.getType());
+        }
+        orderRepository.save(addPositionResult.getOrder());
         return OrderResult.success(order.toDto());
     }
 
@@ -50,8 +57,11 @@ public class OrderFacade {
         if (order == null) {
             return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
-        final Order orderWithPosition = order.removePosition(position);
-        orderRepository.save(orderWithPosition);
+        final OrderDomainResult removePositionResult = order.removePosition(position);
+        if (removePositionResult.isFailure()) {
+            return OrderResult.failure(removePositionResult.getType());
+        }
+        orderRepository.save(removePositionResult.getOrder());
         return OrderResult.success(order.toDto());
     }
 
@@ -60,8 +70,11 @@ public class OrderFacade {
         if (order == null) {
             return OrderResult.failure(OrderResultType.NOT_FOUND);
         }
-        final Order orderSubmitted = order.submit();
-        orderRepository.save(orderSubmitted);
+        final OrderDomainResult submitResult = order.submit();
+        if (submitResult.isFailure()) {
+            return OrderResult.failure(submitResult.getType());
+        }
+        orderRepository.save(submitResult.getOrder());
         return OrderResult.success(order.toDto());
     }
 

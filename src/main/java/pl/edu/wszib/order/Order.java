@@ -19,12 +19,6 @@ class Order {
         this.status = status;
     }
 
-    static Order create(OrderDto orderDto) {
-        return new Order(orderDto.getId(),
-                Position.create(orderDto.getPositions()),
-                orderDto.getStatus());
-    }
-
     OrderDto toDto() {
         return new OrderDto(id, Position.toDto(positions), status);
     }
@@ -33,20 +27,41 @@ class Order {
         return id;
     }
 
-    Order addPosition(final PositionDto position) {
+    static Order create(OrderDto orderDto) {
+        return new Order(orderDto.getId(),
+                Position.create(orderDto.getPositions()),
+                orderDto.getStatus());
+    }
+
+    OrderDomainResult update(OrderDto orderDto) {
+        if (status == OrderStatus.SUBMITTED) {
+            return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
+        }
+        return OrderDomainResult.success(create(orderDto));
+    }
+
+    OrderDomainResult addPosition(final PositionDto position) {
+        if (status == OrderStatus.SUBMITTED) {
+            return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
+        }
         final Set<Position> newPositions = new HashSet<>(this.positions);
         newPositions.add(Position.create(position));
-        return new Order(id, newPositions, status);
+        return OrderDomainResult.success(new Order(id, newPositions, status));
     }
 
-    Order removePosition(final PositionDto position) {
+    OrderDomainResult removePosition(final PositionDto position) {
+        if (status == OrderStatus.SUBMITTED) {
+            return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
+        }
         final Set<Position> newPositions = new HashSet<>(this.positions);
         newPositions.remove(Position.create(position));
-        return new Order(id, newPositions, status);
+        return OrderDomainResult.success(new Order(id, newPositions, status));
     }
 
-    Order submit() {
-        return new Order(this.id, this.positions, OrderStatus.SUBMITTED);
+    OrderDomainResult submit() {
+        if (status == OrderStatus.SUBMITTED) {
+            return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
+        }
+        return OrderDomainResult.success(new Order(this.id, this.positions, OrderStatus.SUBMITTED));
     }
-
 }

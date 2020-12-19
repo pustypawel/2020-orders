@@ -132,8 +132,6 @@ class OrderFacadeTest {
         assertTrue(result.isSuccess(), result::toString);
     }
 
-    // test: zamówienie zatwierdzone nie może być modyfikowane
-
     @Test
     public void should_not_be_able_to_modify_submitted_order() {
         // given: We have submitted order
