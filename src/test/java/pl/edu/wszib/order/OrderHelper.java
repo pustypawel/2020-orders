@@ -15,16 +15,15 @@ public class OrderHelper {
         if (result.isFailure()) {
             throw new IllegalStateException("Failure = " + result);
         }
-        return correctOrder;
+        return result.getOrder();
     }
 
-    // TODO REFACTOR - zwracać OrderDto
-    public String createSubmittedOrder() {
+    public OrderDto createSubmittedOrder() {
         final String orderId = createCorrectOrder().getId();
         final OrderResult result = orderFacade.submit(orderId);
         if (result.isFailure()) {
             throw new IllegalStateException("Failure = " + result);
         }
-        return orderId;
+        return result.getOrder();
     }
 }

@@ -137,7 +137,7 @@ class OrderFacadeTest {
     @Test
     public void should_not_be_able_to_modify_submitted_order() {
         // given: We have submitted order
-        String orderId = orderHelper.createSubmittedOrder();
+        String orderId = orderHelper.createSubmittedOrder().getId();
 
         // when: Wy try to modify order
         OrderResult addPositionResult = orderFacade.addPosition(orderId, OrderSamples.samplePosition1());
