@@ -3,6 +3,8 @@ package pl.edu.wszib.order;
 import lombok.Value;
 import pl.edu.wszib.order.dto.OrderDto;
 
+import java.util.Optional;
+
 @Value
 public class OrderResult {
     OrderResultType type;
@@ -39,5 +41,13 @@ public class OrderResult {
 
     public boolean isFailure() {
         return !isSuccess();
+    }
+
+    public Optional<OrderDto> getOrder() {
+        return Optional.ofNullable(order);
+    }
+
+    public Optional<String> getErrorMessage() {
+        return Optional.ofNullable(errorMessage);
     }
 }

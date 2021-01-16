@@ -6,6 +6,7 @@ import pl.edu.wszib.order.dto.PositionDto;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,24 +14,20 @@ import java.util.stream.Collectors;
 public class OrderValidator {
     private final Validator validator;
 
-    /**
-     * @param orderDto
-     * @return if null order is correct
-     */
-    public OrderResult validate(final OrderDto orderDto) {
+    public Optional<OrderResult> validate(final OrderDto orderDto) {
         final Set<ConstraintViolation<OrderDto>> violations = validator.validate(orderDto);
         if (violations.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
-        return incorrect(violations);
+        return Optional.of(incorrect(violations));
     }
 
-    public OrderResult validate(final PositionDto position) {
+    public Optional<OrderResult> validate(final PositionDto position) {
         final Set<ConstraintViolation<PositionDto>> violations = validator.validate(position);
         if (violations.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
-        return incorrect(violations);
+        return Optional.of(incorrect(violations));
     }
 
     private <TType> OrderResult incorrect(final Set<ConstraintViolation<TType>> violations) {

@@ -8,8 +8,10 @@ import pl.edu.wszib.order.dto.PositionDto;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OrderFacadeTest {
     private OrderFacade orderFacade;
@@ -74,12 +76,12 @@ class OrderFacadeTest {
         String orderId = orderHelper.createCorrectOrder().getId();
 
         // when: We try to get order by id
-        OrderDto order = orderFacade.get(orderId);
+        Optional<OrderDto> order = orderFacade.get(orderId);
 
         // then: We should get order
-        assertNotNull(order);
+        assertTrue(order.isPresent());
         // and: Id should be the same
-        assertEquals(orderId, order.getId());
+        assertEquals(orderId, order.get().getId());
     }
 
     @Test
@@ -88,10 +90,10 @@ class OrderFacadeTest {
         String notExistingOrderId = OrderSamples.notExistingOrderId();
 
         // when: We try to get order by id
-        OrderDto order = orderFacade.get(notExistingOrderId);
+        Optional<OrderDto> order = orderFacade.get(notExistingOrderId);
 
         // then: We should get no order
-        assertNull(order);
+        assertTrue(order.isEmpty());
     }
 
     @Test
@@ -120,7 +122,7 @@ class OrderFacadeTest {
 
         // then: We should have success
         assertTrue(result.isSuccess(), result::toString);
-        OrderDto order = orderFacade.get(orderId);
+        OrderDto order = orderFacade.get(orderId).get();
         assertTrue(containsPosition(order, position), order::toString);
     }
 
@@ -136,7 +138,7 @@ class OrderFacadeTest {
 
         // then: We should have success
         assertTrue(result.isSuccess(), result::toString);
-        OrderDto order = orderFacade.get(createdOrderId);
+        OrderDto order = orderFacade.get(createdOrderId).get();
         assertEquals(createdOrder.getPositions().size() - 1, order.getPositions().size(), order::toString);
     }
 

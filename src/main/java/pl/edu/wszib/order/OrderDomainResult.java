@@ -2,6 +2,8 @@ package pl.edu.wszib.order;
 
 import lombok.Value;
 
+import java.util.Optional;
+
 @Value
 class OrderDomainResult {
     OrderResultType type;
@@ -43,5 +45,13 @@ class OrderDomainResult {
 
     public OrderResult toSuccessApi() {
         return OrderResult.success(order.toDto());
+    }
+
+    public Optional<Order> getOrder() {
+        return Optional.ofNullable(order);
+    }
+
+    public Optional<String> getErrorMessage() {
+        return Optional.ofNullable(errorMessage);
     }
 }

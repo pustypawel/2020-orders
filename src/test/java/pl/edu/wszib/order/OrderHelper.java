@@ -15,7 +15,7 @@ public class OrderHelper {
         if (result.isFailure()) {
             throw new IllegalStateException("Failure = " + result);
         }
-        return result.getOrder();
+        return result.getOrder().get();
     }
 
     public OrderDto createSubmittedOrder() {
@@ -24,6 +24,6 @@ public class OrderHelper {
         if (result.isFailure()) {
             throw new IllegalStateException("Failure = " + result);
         }
-        return result.getOrder();
+        return result.getOrder().get();
     }
 }
