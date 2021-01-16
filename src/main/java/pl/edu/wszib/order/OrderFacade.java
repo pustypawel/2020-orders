@@ -4,25 +4,22 @@ import lombok.AllArgsConstructor;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
 import java.util.Collection;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class OrderFacade {
-    private final Validator validator;
+    private final OrderValidator orderValidator;
     private final OrderRepository orderRepository;
 
     public OrderResult create(final OrderDto orderDto) {
-        final Set<ConstraintViolation<OrderDto>> violations = validator.validate(orderDto);
-        if (violations.isEmpty()) {
-            throw new IllegalArgumentException("Invalid order" + violations.toString());
+        final OrderResult validationResult = orderValidator.validate(orderDto);
+        if (validationResult != null) {
+            return validationResult;
         }
         final String id = orderDto.getId();
         if (orderRepository.exists(id)) {
-            return OrderResult.failure(OrderResultType.ALREADY_EXIST);
+            return OrderResult.alreadyExist(id);
         }
         Order order = Order.create(orderDto);
         orderRepository.save(order);
@@ -30,65 +27,66 @@ public class OrderFacade {
     }
 
     public OrderResult update(final OrderDto orderDto) {
-        final Set<ConstraintViolation<OrderDto>> violations = validator.validate(orderDto);
-        if (violations.isEmpty()) {
-            throw new IllegalArgumentException("Invalid order" + violations.toString());
+        final OrderResult validationResult = orderValidator.validate(orderDto);
+        if (validationResult != null) {
+            return validationResult;
         }
-        Order order = orderRepository.get(orderDto.getId());
+        final String id = orderDto.getId();
+        final Order order = orderRepository.get(id);
         if (order == null) {
-            return OrderResult.failure(OrderResultType.NOT_FOUND);
+            return OrderResult.notFound(id);
         }
-        OrderDomainResult updateResult = order.update(orderDto);
+        final OrderDomainResult updateResult = order.update(orderDto);
         if (updateResult.isFailure()) {
-            return OrderResult.failure(updateResult.getType());
+            return updateResult.toFailureApi();
         }
         orderRepository.save(updateResult.getOrder());
-        return OrderResult.success(order.toDto());
+        return updateResult.toSuccessApi();
     }
 
     public OrderResult addPosition(final String orderId,
                                    final PositionDto position) {
-        final Set<ConstraintViolation<PositionDto>> violations = validator.validate(position);
-        if (violations.isEmpty()) {
-            throw new IllegalArgumentException("Invalid position" + violations.toString());
+        final OrderResult validationResult = orderValidator.validate(position);
+        if (validationResult != null) {
+            return validationResult;
         }
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.failure(OrderResultType.NOT_FOUND);
+            return OrderResult.notFound(orderId);
         }
         final OrderDomainResult addPositionResult = order.addPosition(position);
         if (addPositionResult.isFailure()) {
-            return OrderResult.failure(addPositionResult.getType());
+            return addPositionResult.toFailureApi();
         }
         orderRepository.save(addPositionResult.getOrder());
-        return OrderResult.success(order.toDto());
+        return addPositionResult.toSuccessApi();
     }
 
     public OrderResult removePosition(final String orderId,
                                       final Integer positionNumber) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.failure(OrderResultType.NOT_FOUND);
+            return OrderResult.notFound(orderId);
         }
         final OrderDomainResult removePositionResult = order.removePosition(positionNumber);
         if (removePositionResult.isFailure()) {
-            return OrderResult.failure(removePositionResult.getType());
+            return removePositionResult.toFailureApi();
         }
         orderRepository.save(removePositionResult.getOrder());
-        return OrderResult.success(order.toDto());
+        return removePositionResult.toSuccessApi();
     }
 
     public OrderResult submit(final String orderId) {
         final Order order = orderRepository.get(orderId);
         if (order == null) {
-            return OrderResult.failure(OrderResultType.NOT_FOUND);
+            return OrderResult.notFound(orderId);
         }
         final OrderDomainResult submitResult = order.submit();
         if (submitResult.isFailure()) {
-            return OrderResult.failure(submitResult.getType());
+            return submitResult.toFailureApi();
         }
         orderRepository.save(submitResult.getOrder());
-        return OrderResult.success(order.toDto());
+        return submitResult.toSuccessApi();
     }
 
     /**

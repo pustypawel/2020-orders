@@ -22,7 +22,8 @@ class OrderFacadeTest {
         final OrderRepository orderRepository = new OrderRepository();
         final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         final Validator validator = validatorFactory.getValidator();
-        orderFacade = new OrderFacade(validator, orderRepository);
+        final OrderValidator orderValidator = new OrderValidator(validator);
+        orderFacade = new OrderFacade(orderValidator, orderRepository);
         orderHelper = new OrderHelper(orderFacade);
     }
 
@@ -36,6 +37,20 @@ class OrderFacadeTest {
 
         // then: Order should be created
         assertTrue(result.isSuccess());
+    }
+
+    @Test
+    public void should_not_be_able_to_create_order_with_incorrect_data() {
+        // given: We have incorrect order
+        final OrderDto incorrectOrder = OrderSamples.sampleIncorrectOrder();
+
+        // when: We try to create order
+        final OrderResult result = orderFacade.create(incorrectOrder);
+
+        // then: Order should not be created
+        assertTrue(result.isFailure());
+        // and: the error type should be OrderResultType.INCORRECT
+        assertEquals(OrderResultType.INVALID, result.getType());
     }
 
     @Test

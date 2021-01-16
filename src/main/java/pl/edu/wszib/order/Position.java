@@ -20,6 +20,7 @@ class Position {
         this.quantity = quantity;
         this.product = product;
     }
+
     static Position create(final PositionDto position) {
         return new Position(position.getNumber(),
                 position.getQuantity(),

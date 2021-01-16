@@ -35,14 +35,14 @@ class Order {
 
     OrderDomainResult update(OrderDto orderDto) {
         if (status == OrderStatus.SUBMITTED) {
-            return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
+            return OrderDomainResult.alreadySubmitted(id);
         }
         return OrderDomainResult.success(create(orderDto));
     }
 
     OrderDomainResult addPosition(final PositionDto position) {
         if (status == OrderStatus.SUBMITTED) {
-            return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
+            return OrderDomainResult.alreadySubmitted(id);
         }
         final Set<Position> newPositions = new HashSet<>(this.positions);
         newPositions.add(Position.create(position));
@@ -51,14 +51,14 @@ class Order {
 
     OrderDomainResult removePosition(final Integer positionNumber) {
         if (status == OrderStatus.SUBMITTED) {
-            return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
+            return OrderDomainResult.alreadySubmitted(id);
         }
         final Position positionToRemove = this.positions.stream()
-                .filter(position -> position.hasNumber(position))
+                .filter(position -> position.hasNumber(position))   // FIXME BUG
                 .findFirst()
                 .orElse(null);  // TODO obsłużyć
         if (positionToRemove == null) {
-            return OrderDomainResult.failure(OrderResultType.POSITION_NOT_FOUND);
+            return OrderDomainResult.positionNotFound(id, positionNumber);
         }
         final Set<Position> newPositions = new HashSet<>(this.positions);
         newPositions.remove(positionToRemove);
@@ -67,7 +67,7 @@ class Order {
 
     OrderDomainResult submit() {
         if (status == OrderStatus.SUBMITTED) {
-            return OrderDomainResult.failure(OrderResultType.ALREADY_SUBMITTED);
+            return OrderDomainResult.alreadySubmitted(id);
         }
         return OrderDomainResult.success(new Order(this.id, this.positions, OrderStatus.SUBMITTED));
     }
