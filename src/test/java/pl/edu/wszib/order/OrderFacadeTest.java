@@ -11,7 +11,6 @@ import javax.validation.ValidatorFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO przenumerowanie numerów pozycji po usunięciu np ze środka
 class OrderFacadeTest {
     private OrderFacade orderFacade;
 
@@ -138,7 +137,7 @@ class OrderFacadeTest {
         // then: We should have success
         assertTrue(result.isSuccess(), result::toString);
         OrderDto order = orderFacade.get(createdOrderId);
-//        assertTrue(notContainsPosition(order, position), order::toString);    // TODO IMPL
+        assertEquals(createdOrder.getPositions().size() - 1, order.getPositions().size(), order::toString);
     }
 
     @Test

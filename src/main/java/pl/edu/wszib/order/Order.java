@@ -3,16 +3,16 @@ package pl.edu.wszib.order;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 class Order {
     private final String id;
-    private final Set<Position> positions;
+    private final List<Position> positions;
     private final OrderStatus status;
 
     Order(final String id,
-          final Set<Position> positions,
+          final List<Position> positions,
           final OrderStatus status) {
         this.id = id;
         this.positions = positions;
@@ -44,7 +44,7 @@ class Order {
         if (status == OrderStatus.SUBMITTED) {
             return OrderDomainResult.alreadySubmitted(id);
         }
-        final Set<Position> newPositions = new HashSet<>(this.positions);
+        final List<Position> newPositions = new ArrayList<>(this.positions);
         newPositions.add(Position.create(position));
         return OrderDomainResult.success(new Order(id, newPositions, status));
     }
@@ -53,16 +53,17 @@ class Order {
         if (status == OrderStatus.SUBMITTED) {
             return OrderDomainResult.alreadySubmitted(id);
         }
-        final Position positionToRemove = this.positions.stream()
-                .filter(position -> position.hasNumber(position))   // FIXME BUG
-                .findFirst()
-                .orElse(null);  // TODO obsłużyć
-        if (positionToRemove == null) {
+        if (positionNumber < this.positions.size()) {
+            final Position positionToRemove = this.positions.get(positionNumber);
+            if (positionToRemove == null) {
+                return OrderDomainResult.positionNotFound(id, positionNumber);
+            }
+            final List<Position> newPositions = new ArrayList<>(this.positions);
+            newPositions.remove(positionToRemove);
+            return OrderDomainResult.success(new Order(id, newPositions, status));
+        } else {
             return OrderDomainResult.positionNotFound(id, positionNumber);
         }
-        final Set<Position> newPositions = new HashSet<>(this.positions);
-        newPositions.remove(positionToRemove);
-        return OrderDomainResult.success(new Order(id, newPositions, status));
     }
 
     OrderDomainResult submit() {

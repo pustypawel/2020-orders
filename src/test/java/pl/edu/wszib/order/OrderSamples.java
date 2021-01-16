@@ -5,7 +5,7 @@ import pl.edu.wszib.order.dto.PositionDto;
 import pl.edu.wszib.order.dto.ProductDto;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 public class OrderSamples {
     public static String notExistingOrderId() {
@@ -18,19 +18,19 @@ public class OrderSamples {
 
     public static OrderDto sampleOrder2(String orderId) {
         return new OrderDto(orderId,
-                Set.of(samplePosition1(), samplePosition2()), OrderStatus.DRAFT);
+                List.of(samplePosition1(), samplePosition2()), OrderStatus.DRAFT);
     }
 
-    static Set<PositionDto> samplePositions() {
-        return Set.of(samplePosition1());
+    static List<PositionDto> samplePositions() {
+        return List.of(samplePosition1());
     }
 
     static PositionDto samplePosition1() {
-        return new PositionDto(1, 2, new ProductDto("Test product", new BigDecimal("20.05")));
+        return new PositionDto(2, new ProductDto("Test product", new BigDecimal("20.05")));
     }
 
     static PositionDto samplePosition2() {
-        return new PositionDto(2, 5, new ProductDto("Test product 2", new BigDecimal("10.05")));
+        return new PositionDto(5, new ProductDto("Test product 2", new BigDecimal("10.05")));
     }
 
     public static OrderDto sampleIncorrectOrder() {

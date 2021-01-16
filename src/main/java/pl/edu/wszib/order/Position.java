@@ -3,47 +3,38 @@ package pl.edu.wszib.order;
 import lombok.EqualsAndHashCode;
 import pl.edu.wszib.order.dto.PositionDto;
 
-import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 class Position {
-    private final Integer number;
     private final Integer quantity;
     private final Product product;
 
-    Position(final Integer number,
-             final Integer quantity,
+    Position(final Integer quantity,
              final Product product) {
-        this.number = number;
         this.quantity = quantity;
         this.product = product;
     }
 
     static Position create(final PositionDto position) {
-        return new Position(position.getNumber(),
-                position.getQuantity(),
+        return new Position(position.getQuantity(),
                 Product.create(position.getProduct()));
     }
 
-    static Set<Position> create(final Set<PositionDto> positions) {
+    static List<Position> create(final List<PositionDto> positions) {
         return positions.stream()
                 .map(Position::create)
-                .collect(Collectors.toSet());
-    }
-
-    boolean hasNumber(Position position) {
-        return Objects.equals(this.number, position.number);
+                .collect(Collectors.toList());
     }
 
     PositionDto toDto() {
-        return new PositionDto(number, quantity, product.toDto());
+        return new PositionDto(quantity, product.toDto());
     }
 
-    static Set<PositionDto> toDto(Set<Position> positions) {
+    static List<PositionDto> toDto(final List<Position> positions) {
         return positions.stream()
                 .map(Position::toDto)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 }

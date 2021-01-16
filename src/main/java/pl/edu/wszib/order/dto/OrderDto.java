@@ -7,14 +7,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 
 @Value
 public class OrderDto {
     @NotBlank
     String id;
     @NotEmpty
-    Set<@Valid PositionDto> positions;
+    List<@Valid PositionDto> positions;
     @NotNull
     OrderStatus status;
 }
