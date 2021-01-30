@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class OrderInfrastructureApplication {
 
 	public static void main(String[] args) {
-		A a
 		SpringApplication.run(OrderInfrastructureApplication.class, args);
 	}
 
