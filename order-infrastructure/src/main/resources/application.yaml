@@ -1,0 +1,7 @@
+spring:
+  liquibase:
+    enabled: false
+myProperty: myTestProperty
+testconfig:
+  my-property2: dsa
+  my-property1: asd
