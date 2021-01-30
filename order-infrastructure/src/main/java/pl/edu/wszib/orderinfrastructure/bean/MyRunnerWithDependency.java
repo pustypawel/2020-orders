@@ -2,14 +2,17 @@ package pl.edu.wszib.orderinfrastructure.bean;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-@AllArgsConstructor
 @Component
-public class MyRunner2 implements CommandLineRunner {
+public class MyRunnerWithDependency implements CommandLineRunner {
     private final MyRunner myRunner;
-//    @Autowired
+
+    public MyRunnerWithDependency(@Qualifier("myRunner1") MyRunner myRunner) {
+        this.myRunner = myRunner;
+    }
 
     @Override
     public void run(String... args) throws Exception {
