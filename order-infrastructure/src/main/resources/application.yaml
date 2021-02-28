@@ -1,6 +1,8 @@
 spring:
   liquibase:
     enabled: false
+server:
+  port: 8080
 myProperty: myTestProperty
 testconfig:
   my-property2: dsa
