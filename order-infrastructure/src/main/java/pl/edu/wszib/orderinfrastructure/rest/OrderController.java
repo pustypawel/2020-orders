@@ -4,14 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.wszib.order.OrderFacade;
+import pl.edu.wszib.order.dto.OrderDto;
 
-import java.util.Optional;
-
-//@RestController
-//@RequestMapping
-//@PathVariable
-//@RequestParam
-//@MatrixVariable
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -23,18 +18,8 @@ public class OrderController {
     private final OrderFacade orderFacade;
 
     @GetMapping
-    public Object getAll(@RequestParam final String id) {
-        return id;
-    }
-
-    @GetMapping("/additional-path")
-    public Object getAll2() {
-        return "2";
-    }
-
-    @GetMapping("/{id}")
-    public Object getAll3(@PathVariable final String id) {
-        return id;
+    public Collection<OrderDto> getAll() {
+        return orderFacade.getAll();
     }
 
     @PostMapping
