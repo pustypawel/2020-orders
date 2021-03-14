@@ -10,15 +10,9 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class OrderFacade {
-    private final OrderValidator orderValidator;
     private final OrderRepository orderRepository;
 
     public OrderResult create(final OrderDto orderDto) {
-        return orderValidator.validate(orderDto)
-                .orElseGet(() -> doCreate(orderDto));
-    }
-
-    private OrderResult doCreate(final OrderDto orderDto) {
         final String id = orderDto.getId();
         if (orderRepository.exists(id)) {
             return OrderResult.alreadyExist(id);
@@ -29,11 +23,6 @@ public class OrderFacade {
     }
 
     public OrderResult update(final OrderDto orderDto) {
-        return orderValidator.validate(orderDto)
-                .orElseGet(() -> doUpdate(orderDto));
-    }
-
-    private OrderResult doUpdate(final OrderDto orderDto) {
         final String id = orderDto.getId();
         return orderRepository.get(id)
                 .map(order -> {
@@ -49,12 +38,6 @@ public class OrderFacade {
 
     public OrderResult addPosition(final String orderId,
                                    final PositionDto position) {
-        return orderValidator.validate(position)
-                .orElseGet(() -> doAddPosition(orderId, position));
-    }
-
-    private OrderResult doAddPosition(final String orderId,
-                                      final PositionDto position) {
         return orderRepository.get(orderId)
                 .map(order -> {
                     final OrderDomainResult addPositionResult = order.addPosition(position);
