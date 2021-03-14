@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import pl.edu.wszib.order.OrderFacade;
 import pl.edu.wszib.order.OrderRepository;
 
-import javax.validation.Validator;
-
 @Configuration
 public class OrderConfiguration {
 

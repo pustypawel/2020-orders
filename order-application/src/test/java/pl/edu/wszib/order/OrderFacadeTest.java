@@ -21,10 +21,7 @@ class OrderFacadeTest {
     @BeforeEach
     void setUp() {
         final OrderRepository orderRepository = new OrderRepository();
-        final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-        final Validator validator = validatorFactory.getValidator();
-        final OrderValidator orderValidator = new OrderValidator(validator);
-        orderFacade = new OrderFacade(orderValidator, orderRepository);
+        orderFacade = new OrderFacade(orderRepository);
         orderHelper = new OrderHelper(orderFacade);
     }
 
