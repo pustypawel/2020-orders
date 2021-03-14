@@ -1,7 +1,6 @@
 package pl.edu.wszib.orderinfrastructure.rest;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.wszib.order.OrderFacade;
 import pl.edu.wszib.order.OrderResult;
