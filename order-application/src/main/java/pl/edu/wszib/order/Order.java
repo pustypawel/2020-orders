@@ -6,7 +6,7 @@ import pl.edu.wszib.order.dto.PositionDto;
 import java.util.ArrayList;
 import java.util.List;
 
-class Order {
+public class Order {
     private final String id;
     private final List<Position> positions;
     private final OrderStatus status;

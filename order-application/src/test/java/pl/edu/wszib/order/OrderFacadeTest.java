@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +17,7 @@ class OrderFacadeTest {
 
     @BeforeEach
     void setUp() {
-        final OrderRepository orderRepository = new OrderRepository();
+        final InMemoryOrderRepository orderRepository = new InMemoryOrderRepository();
         orderFacade = new OrderFacade(orderRepository);
         orderHelper = new OrderHelper(orderFacade);
     }
@@ -35,20 +32,6 @@ class OrderFacadeTest {
 
         // then: Order should be created
         assertTrue(result.isSuccess());
-    }
-
-    @Test
-    public void should_not_be_able_to_create_order_with_incorrect_data() {
-        // given: We have incorrect order
-        final OrderDto incorrectOrder = OrderSamples.sampleIncorrectOrder();
-
-        // when: We try to create order
-        final OrderResult result = orderFacade.create(incorrectOrder);
-
-        // then: Order should not be created
-        assertTrue(result.isFailure());
-        // and: the error type should be OrderResultType.INCORRECT
-        assertEquals(OrderResultType.INVALID, result.getType());
     }
 
     @Test

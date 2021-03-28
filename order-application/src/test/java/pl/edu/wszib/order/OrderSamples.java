@@ -33,7 +33,4 @@ public class OrderSamples {
         return new PositionDto(5, new ProductDto("Test product 2", new BigDecimal("10.05")));
     }
 
-    public static OrderDto sampleIncorrectOrder() {
-        return new OrderDto(null, null, null);
-    }
 }

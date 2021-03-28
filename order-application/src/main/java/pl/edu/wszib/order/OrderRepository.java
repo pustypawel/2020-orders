@@ -1,26 +1,14 @@
 package pl.edu.wszib.order;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
-public class OrderRepository {
-    private final Map<String, Order> orders = new HashMap<>();
+public interface OrderRepository {
+    boolean exists(String id);
 
-    boolean exists(final String id) {
-        return orders.containsKey(id);
-    }
+    void save(Order order);
 
-    void save(final Order order) {
-        orders.put(order.getId(), order);
-    }
+    Optional<Order> get(String id);
 
-    Optional<Order> get(final String id) {
-        return Optional.ofNullable(orders.get(id));
-    }
-
-    Collection<Order> getAll() {
-        return orders.values();
-    }
+    Collection<Order> getAll();
 }
