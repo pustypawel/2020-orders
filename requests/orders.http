@@ -1,0 +1,49 @@
+### Get all orders
+GET http://localhost:8080/api/orders
+
+### Create order
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "id": "98f66f8a-abc5-42d9-8e56-907dfd661f2c",
+  "positions": [{
+    "quantity": 1000,
+    "product": {
+      "name": "Testowy produkt",
+      "price": 20.25
+    }
+  }, {
+    "quantity": 2000,
+    "product": {
+      "name": "Testowy produkt 2",
+      "price": 30.25
+    }
+  }],
+  "status": "DRAFT"
+}
+
+### Update order
+PUT http://localhost:8080/api/orders/98f66f8a-abc5-42d9-8e56-907dfd661f2c
+Content-Type: application/json
+
+{
+  "id": "98f66f8a-abc5-42d9-8e56-907dfd661f2c",
+  "positions": [{
+    "quantity": 1000,
+    "product": {
+      "name": "Testowy produkt",
+      "price": 20.25
+    }
+  }, {
+    "quantity": 2000,
+    "product": {
+      "name": "Testowy produkt 2",
+      "price": 30.25
+    }
+  }],
+  "status": "DRAFT"
+}
+
+### Submit order
+POST http://localhost:8080/api/orders/98f66f8a-abc5-42d9-8e56-907dfd661f2c/submit

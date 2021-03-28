@@ -1,7 +1,6 @@
 package pl.edu.wszib.orderinfrastructure.rest;
 
 import lombok.AllArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.wszib.order.OrderFacade;
 import pl.edu.wszib.order.OrderResult;
@@ -9,7 +8,6 @@ import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
