@@ -12,6 +12,12 @@ public class PositionEntity {
     @GeneratedValue
     private Long id;
 
+    @Column(nullable = false)
+    private Integer quantity;
+
+    @OneToOne(optional = false, cascade = CascadeType.ALL, mappedBy = "position", orphanRemoval = true)
+    private ProductEntity product;
+
     protected PositionEntity() {
         // for JPA
     }

@@ -5,7 +5,6 @@ import pl.edu.wszib.order.OrderStatus;
 import javax.persistence.*;
 import java.util.List;
 
-//TODO uzupełnić resztę modelu encji (product, position)
 @Entity
 @Table(name = "ORDERS")
 public class OrderEntity {
