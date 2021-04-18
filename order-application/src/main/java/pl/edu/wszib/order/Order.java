@@ -1,5 +1,6 @@
 package pl.edu.wszib.order;
 
+import io.vavr.control.Either;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
@@ -33,36 +34,36 @@ public class Order {
                 orderDto.getStatus());
     }
 
-    OrderDomainResult update(OrderDto orderDto) {
+    Either<OrderFailure, Order> update(OrderDto orderDto) {
         if (status == OrderStatus.SUBMITTED) {
-            return OrderDomainResult.alreadySubmitted(id);
+            return Either.left(OrderFailure.alreadySubmitted(id));
         }
-        return OrderDomainResult.success(create(orderDto));
+        return Either.right(create(orderDto));
     }
 
-    OrderDomainResult addPosition(final PositionDto position) {
+    Either<OrderFailure, Order> addPosition(final PositionDto position) {
         if (status == OrderStatus.SUBMITTED) {
-            return OrderDomainResult.alreadySubmitted(id);
+            return Either.left(OrderFailure.alreadySubmitted(id));
         }
         final List<Position> newPositions = new ArrayList<>(this.positions);
         newPositions.add(Position.create(position));
-        return OrderDomainResult.success(new Order(id, newPositions, status));
+        return Either.right(new Order(id, newPositions, status));
     }
 
-    OrderDomainResult removePosition(final Integer positionNumber) {
+    Either<OrderFailure, Order> removePosition(final Integer positionNumber) {
         if (status == OrderStatus.SUBMITTED) {
-            return OrderDomainResult.alreadySubmitted(id);
+            return Either.left(OrderFailure.alreadySubmitted(id));
         }
         if (positionNumber < this.positions.size()) {
             final Position positionToRemove = this.positions.get(positionNumber);
             if (positionToRemove == null) {
-                return OrderDomainResult.positionNotFound(id, positionNumber);
+                return Either.left(OrderFailure.positionNotFound(id, positionNumber));
             }
             final List<Position> newPositions = new ArrayList<>(this.positions);
             newPositions.remove(positionToRemove);
-            return OrderDomainResult.success(new Order(id, newPositions, status));
+            return Either.right(new Order(id, newPositions, status));
         } else {
-            return OrderDomainResult.positionNotFound(id, positionNumber);
+            return Either.left(OrderFailure.positionNotFound(id, positionNumber));
         }
     }
 

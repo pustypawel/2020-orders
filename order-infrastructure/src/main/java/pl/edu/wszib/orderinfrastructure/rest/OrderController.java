@@ -24,30 +24,34 @@ public class OrderController {
     }
 
     @PostMapping("{orderId}/submit")
-    public OrderResult submit(final @PathVariable String orderId) {
-        return orderFacade.submit(orderId);
+    public OrderDto submit(final @PathVariable String orderId) {
+        return orderFacade.submit(orderId)
+                .get(); //TODO Either.left obsługa
     }
 
     @PutMapping("{orderId}")
-    public OrderResult submit(final @PathVariable String orderId,
-                              final @RequestBody @Valid OrderDto request) {
+    public OrderDto submit(final @PathVariable String orderId,
+                           final @RequestBody @Valid OrderDto request) {
         if (Objects.equals(orderId, request.getId())) {
-            return orderFacade.update(request);
+            return orderFacade.update(request)
+                    .get(); //TODO Either.left obsługa
         } else {
             throw new RuntimeException("Unexpected orderId difference. param = " + orderId + " in body = " + request.getId());
         }
     }
 
     @PostMapping("{orderId}/positions")
-    public OrderResult addPosition(final @PathVariable String orderId,
-                                   final @RequestBody @Valid PositionDto position) {
-        return orderFacade.addPosition(orderId, position);
+    public OrderDto addPosition(final @PathVariable String orderId,
+                                final @RequestBody @Valid PositionDto position) {
+        return orderFacade.addPosition(orderId, position)
+                .get(); //TODO Either.left obsługa
     }
 
     @DeleteMapping("{orderId}/positions/{positionNumber}")
-    public OrderResult addPosition(final @PathVariable String orderId,
-                                   final @PathVariable Integer positionNumber) {
-        return orderFacade.removePosition(orderId, positionNumber);
+    public OrderDto addPosition(final @PathVariable String orderId,
+                                final @PathVariable Integer positionNumber) {
+        return orderFacade.removePosition(orderId, positionNumber)
+                .get(); //TODO Either.left obsługa
     }
 
     @GetMapping
@@ -56,8 +60,9 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderResult create(final @RequestBody @Valid OrderDto request) {
-        return orderFacade.create(request);
+    public OrderDto create(final @RequestBody @Valid OrderDto request) {
+        return orderFacade.create(request)
+                .get(); //TODO Either.left obsługa
     }
 
 }

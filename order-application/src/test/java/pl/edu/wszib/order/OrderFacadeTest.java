@@ -1,5 +1,6 @@
 package pl.edu.wszib.order;
 
+import io.vavr.control.Either;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.edu.wszib.order.dto.OrderDto;
@@ -28,10 +29,10 @@ class OrderFacadeTest {
         final OrderDto correctOrder = OrderSamples.sampleOrder();
 
         // when: We try to create order
-        final OrderResult result = orderFacade.create(correctOrder);
+        Either<OrderFailure, OrderDto> result = orderFacade.create(correctOrder);
 
         // then: Order should be created
-        assertTrue(result.isSuccess());
+        assertTrue(result.isRight());
     }
 
     @Test
@@ -42,12 +43,12 @@ class OrderFacadeTest {
         final OrderDto orderWithTheSameId = OrderSamples.sampleOrder2(orderId);
 
         // when: We try to create order with the same id
-        OrderResult result = orderFacade.create(orderWithTheSameId);
+        Either<OrderFailure, OrderDto> result = orderFacade.create(orderWithTheSameId);
 
         // then: Order should not be created
-        assertTrue(result.isFailure());
+        assertTrue(result.isLeft());
         // and: the failure reason should be ALREADY_EXIST
-        assertEquals(OrderResultType.ALREADY_EXIST, result.getType());
+        assertEquals(OrderFailureType.ALREADY_EXIST, result.getLeft().getType());
     }
 
     @Test
@@ -84,10 +85,10 @@ class OrderFacadeTest {
         OrderDto modifiedOrder = OrderSamples.sampleOrder2(orderId);
 
         // when: We try to update order
-        OrderResult result = orderFacade.update(modifiedOrder);
+        Either<OrderFailure, OrderDto> result = orderFacade.update(modifiedOrder);
 
         // then: We should have success
-        assertTrue(result.isSuccess(), result::toString);
+        assertTrue(result.isRight(), result::toString);
     }
 
     @Test
@@ -98,10 +99,10 @@ class OrderFacadeTest {
         PositionDto position = OrderSamples.samplePosition1();
 
         // when: We try to add position to order
-        OrderResult result = orderFacade.addPosition(orderId, position);
+        Either<OrderFailure, OrderDto> result = orderFacade.addPosition(orderId, position);
 
         // then: We should have success
-        assertTrue(result.isSuccess(), result::toString);
+        assertTrue(result.isRight(), result::toString);
         OrderDto order = orderFacade.get(orderId).get();
         assertTrue(containsPosition(order, position), order::toString);
     }
@@ -114,10 +115,10 @@ class OrderFacadeTest {
         // and: We have position to remove
 
         // when: We try to remove position to order
-        OrderResult result = orderFacade.removePosition(createdOrderId, 0);
+        Either<OrderFailure, OrderDto> result = orderFacade.removePosition(createdOrderId, 0);
 
         // then: We should have success
-        assertTrue(result.isSuccess(), result::toString);
+        assertTrue(result.isRight(), result::toString);
         OrderDto order = orderFacade.get(createdOrderId).get();
         assertEquals(createdOrder.getPositions().size() - 1, order.getPositions().size(), order::toString);
     }
@@ -141,15 +142,15 @@ class OrderFacadeTest {
         String orderId = order.getId();
 
         // when: Wy try to modify order
-        OrderResult addPositionResult = orderFacade.addPosition(orderId, OrderSamples.samplePosition1());
-        OrderResult removePositionResult = orderFacade.removePosition(orderId, 0);
-        OrderResult updateResult = orderFacade.update(OrderSamples.sampleOrder2(orderId));
+        Either<OrderFailure, OrderDto> addPositionResult = orderFacade.addPosition(orderId, OrderSamples.samplePosition1());
+        Either<OrderFailure, OrderDto> removePositionResult = orderFacade.removePosition(orderId, 0);
+        Either<OrderFailure, OrderDto> updateResult = orderFacade.update(OrderSamples.sampleOrder2(orderId));
         OrderResult submitResult = orderFacade.submit(orderId);
 
         // then: All modifying operations should fail
-        assertTrue(addPositionResult.isFailure());
-        assertTrue(removePositionResult.isFailure());
-        assertTrue(updateResult.isFailure());
+        assertTrue(addPositionResult.isLeft());
+        assertTrue(removePositionResult.isLeft());
+        assertTrue(updateResult.isLeft());
         assertTrue(submitResult.isFailure());
     }
 

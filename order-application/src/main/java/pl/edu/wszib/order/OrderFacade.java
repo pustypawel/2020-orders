@@ -1,9 +1,12 @@
 package pl.edu.wszib.order;
 
+import io.vavr.control.Either;
+import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
+import javax.swing.*;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,56 +15,41 @@ import java.util.stream.Collectors;
 public class OrderFacade {
     private final OrderRepository orderRepository;
 
-    public OrderResult create(final OrderDto orderDto) {
+    public Either<OrderFailure, OrderDto> create(final OrderDto orderDto) {
         final String id = orderDto.getId();
         if (orderRepository.exists(id)) {
-            return OrderResult.alreadyExist(id);
+            return Either.left(OrderFailure.alreadyExist(id));
         }
         Order order = Order.create(orderDto);
         orderRepository.save(order);
-        return OrderResult.success(order.toDto());
+        return Either.right(order.toDto());
     }
 
-    public OrderResult update(final OrderDto orderDto) {
+    public Either<OrderFailure, OrderDto> update(final OrderDto orderDto) {
         final String id = orderDto.getId();
-        return orderRepository.get(id)
-                .map(order -> {
-                    final OrderDomainResult updateResult = order.update(orderDto);
-                    if (updateResult.isFailure()) {
-                        return updateResult.toFailureApi();
-                    }
-                    orderRepository.save(updateResult.getOrder().get());
-                    return updateResult.toSuccessApi();
-                })
-                .orElseGet(() -> OrderResult.notFound(id));
+        return Option.ofOptional(orderRepository.get(id))
+                .toEither(() -> OrderFailure.notFound(id))
+                .flatMap(order -> order.update(orderDto))
+
+                .map(Order::toDto);
     }
 
-    public OrderResult addPosition(final String orderId,
-                                   final PositionDto position) {
-        return orderRepository.get(orderId)
-                .map(order -> {
-                    final OrderDomainResult addPositionResult = order.addPosition(position);
-                    if (addPositionResult.isFailure()) {
-                        return addPositionResult.toFailureApi();
-                    }
-                    orderRepository.save(addPositionResult.getOrder().get());
-                    return addPositionResult.toSuccessApi();
-                })
-                .orElseGet(() -> OrderResult.notFound(orderId));
+    public Either<OrderFailure, OrderDto> addPosition(final String id,
+                                                      final PositionDto position) {
+        return Option.ofOptional(orderRepository.get(id))
+                .toEither(() -> OrderFailure.notFound(id))
+                .flatMap(order -> order.addPosition(position))
+                .map(orderRepository::save)
+                .map(Order::toDto);
     }
 
-    public OrderResult removePosition(final String orderId,
-                                      final Integer positionNumber) {
-        return orderRepository.get(orderId)
-                .map(order -> {
-                    final OrderDomainResult removePositionResult = order.removePosition(positionNumber);
-                    if (removePositionResult.isFailure()) {
-                        return removePositionResult.toFailureApi();
-                    }
-                    orderRepository.save(removePositionResult.getOrder().get());
-                    return removePositionResult.toSuccessApi();
-                })
-                .orElseGet(() -> OrderResult.notFound(orderId));
+    public Either<OrderFailure, OrderDto> removePosition(final String id,
+                                                         final Integer positionNumber) {
+        return Option.ofOptional(orderRepository.get(id))
+                .toEither(() -> OrderFailure.notFound(id))
+                .flatMap(order -> order.removePosition(positionNumber))
+                .map(orderRepository::save)
+                .map(Order::toDto);
     }
 
     public OrderResult submit(final String orderId) {

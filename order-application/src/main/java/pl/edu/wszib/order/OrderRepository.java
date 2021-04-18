@@ -6,7 +6,7 @@ import java.util.Optional;
 public interface OrderRepository {
     boolean exists(String id);
 
-    void save(Order order);
+    Order save(Order order);
 
     Optional<Order> get(String id);
 

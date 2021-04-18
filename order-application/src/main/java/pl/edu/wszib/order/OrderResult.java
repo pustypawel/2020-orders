@@ -7,36 +7,32 @@ import java.util.Optional;
 
 @Value
 public class OrderResult {
-    OrderResultType type;
+    OrderFailureType type;
     OrderDto order;
     String errorMessage;
 
-    public static OrderResult failure(final OrderResultType type,
+    public static OrderResult failure(final OrderFailureType type,
                                       final String errorMessage) {
-        if (type == OrderResultType.OK) {
-            throw new IllegalArgumentException("type can't be " + OrderResultType.OK);
+        if (type == OrderFailureType.OK) {
+            throw new IllegalArgumentException("type can't be " + OrderFailureType.OK);
         }
         return new OrderResult(type, null, errorMessage);
     }
 
     public static OrderResult success(final OrderDto order) {
-        return new OrderResult(OrderResultType.OK, order, null);
-    }
-
-    public static OrderResult alreadyExist(final String id) {
-        return failure(OrderResultType.ALREADY_EXIST, "Order with id " + id + " already exists");
+        return new OrderResult(OrderFailureType.OK, order, null);
     }
 
     public static OrderResult notFound(final String orderId) {
-        return failure(OrderResultType.NOT_FOUND, "Order with id " + orderId + " not found");
+        return failure(OrderFailureType.NOT_FOUND, "Order with id " + orderId + " not found");
     }
 
     public static OrderResult invalid(final String errorMessage) {
-        return failure(OrderResultType.INVALID, errorMessage);
+        return failure(OrderFailureType.INVALID, errorMessage);
     }
 
     public boolean isSuccess() {
-        return type == OrderResultType.OK;
+        return type == OrderFailureType.OK;
     }
 
     public boolean isFailure() {

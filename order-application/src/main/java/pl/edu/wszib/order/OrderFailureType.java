@@ -1,6 +1,6 @@
 package pl.edu.wszib.order;
 
-public enum OrderResultType {
+public enum OrderFailureType {
     OK,
     INVALID,
     ALREADY_EXIST,
