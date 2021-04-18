@@ -24,9 +24,8 @@ public class OrderController {
     }
 
     @PostMapping("{orderId}/submit")
-    public OrderDto submit(final @PathVariable String orderId) {
-        return orderFacade.submit(orderId)
-                .get(); //TODO Either.left obsługa
+    public OrderResult submit(final @PathVariable String orderId) {
+        return orderFacade.submit(orderId);
     }
 
     @PutMapping("{orderId}")
