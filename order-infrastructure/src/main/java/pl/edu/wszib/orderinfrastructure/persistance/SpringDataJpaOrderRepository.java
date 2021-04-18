@@ -15,8 +15,8 @@ public class SpringDataJpaOrderRepository implements OrderRepository {
     }
 
     @Override
-    public void save(Order order) {
-
+    public Order save(Order order) {
+        return order;
     }
 
     @Override

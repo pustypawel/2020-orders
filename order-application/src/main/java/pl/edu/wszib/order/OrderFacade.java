@@ -52,17 +52,38 @@ public class OrderFacade {
                 .map(Order::toDto);
     }
 
-    public OrderResult submit(final String orderId) {
-        return orderRepository.get(orderId)
-                .map(order -> {
-                    final OrderDomainResult submitResult = order.submit();
-                    if (submitResult.isFailure()) {
-                        return submitResult.toFailureApi();
-                    }
-                    orderRepository.save(submitResult.getOrder().get());
-                    return submitResult.toSuccessApi();
-                })
-                .orElseGet(() -> OrderResult.notFound(orderId));
+    //TODO IMPL using Either:
+    public Either<OrderFailure, OrderDto> submit(final String id) {
+        // 1 option
+//        Optional<Order> order1 = orderRepository.get(id);
+//        if (order1.isPresent()) {
+//            final OrderDomainResult submitResult = order1.get().submit();
+//            if (submitResult.isFailure()) {
+//                return submitResult.toFailureApi();
+//            }
+//            orderRepository.save(submitResult.getOrder().get());
+//            return submitResult.toSuccessApi();
+//        } else {
+//            return OrderResult.notFound(id);
+//        }
+        // 2 option
+//        Optional<Order> order1 = orderRepository.get(id);
+//        if (order1.isPresent()) {
+//            Either<OrderFailure, Order> order2 = order1.get().submit();
+//            if (order2.isRight()) {
+//                return Either.right(orderRepository.save(order2.get())
+//                        .toDto());
+//            } else {
+//                return Either.left(order2.getLeft());
+//            }
+//        } else {
+//            return Either.left(OrderFailure.notFound(id));
+//        }
+        return Option.ofOptional(orderRepository.get(id))
+                .toEither(() -> OrderFailure.notFound(id))
+                .flatMap(Order::submit)
+                .map(orderRepository::save)
+                .map(Order::toDto);
     }
 
     public Optional<OrderDto> get(final String id) {

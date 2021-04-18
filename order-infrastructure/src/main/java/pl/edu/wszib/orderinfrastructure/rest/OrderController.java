@@ -3,7 +3,6 @@ package pl.edu.wszib.orderinfrastructure.rest;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.wszib.order.OrderFacade;
-import pl.edu.wszib.order.OrderResult;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
@@ -24,12 +23,13 @@ public class OrderController {
     }
 
     @PostMapping("{orderId}/submit")
-    public OrderResult submit(final @PathVariable String orderId) {
-        return orderFacade.submit(orderId);
+    public OrderDto update(final @PathVariable String orderId) {
+        return orderFacade.submit(orderId)
+                .get(); //TODO Either.left obsługa
     }
 
     @PutMapping("{orderId}")
-    public OrderDto submit(final @PathVariable String orderId,
+    public OrderDto update(final @PathVariable String orderId,
                            final @RequestBody @Valid OrderDto request) {
         if (Objects.equals(orderId, request.getId())) {
             return orderFacade.update(request)

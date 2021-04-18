@@ -17,6 +17,7 @@ public class OrderHelper {
 
     public OrderDto createSubmittedOrder() {
         final String orderId = createCorrectOrder().getId();
-        return orderFacade.submit(orderId).getOrder().get();
+        return orderFacade.submit(orderId)
+                .get();
     }
 }

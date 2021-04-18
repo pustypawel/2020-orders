@@ -129,10 +129,10 @@ class OrderFacadeTest {
         String orderId = orderHelper.createCorrectOrder().getId();
 
         // when: We try to submit
-        OrderResult result = orderFacade.submit(orderId);
+        Either<OrderFailure, OrderDto> result = orderFacade.submit(orderId);
 
         // then: We should have success
-        assertTrue(result.isSuccess(), result::toString);
+        assertTrue(result.isRight(), result::toString);
     }
 
     @Test
@@ -145,13 +145,13 @@ class OrderFacadeTest {
         Either<OrderFailure, OrderDto> addPositionResult = orderFacade.addPosition(orderId, OrderSamples.samplePosition1());
         Either<OrderFailure, OrderDto> removePositionResult = orderFacade.removePosition(orderId, 0);
         Either<OrderFailure, OrderDto> updateResult = orderFacade.update(OrderSamples.sampleOrder2(orderId));
-        OrderResult submitResult = orderFacade.submit(orderId);
+        Either<OrderFailure, OrderDto> submitResult = orderFacade.submit(orderId);
 
         // then: All modifying operations should fail
         assertTrue(addPositionResult.isLeft());
         assertTrue(removePositionResult.isLeft());
         assertTrue(updateResult.isLeft());
-        assertTrue(submitResult.isFailure());
+        assertTrue(submitResult.isRight());
     }
 
     private boolean notContainsPosition(OrderDto order,

@@ -67,10 +67,10 @@ public class Order {
         }
     }
 
-    OrderDomainResult submit() {
+    Either<OrderFailure, Order> submit() {
         if (status == OrderStatus.SUBMITTED) {
-            return OrderDomainResult.alreadySubmitted(id);
+            return Either.left(OrderFailure.alreadySubmitted(id));
         }
-        return OrderDomainResult.success(new Order(this.id, this.positions, OrderStatus.SUBMITTED));
+        return Either.right(new Order(this.id, this.positions, OrderStatus.SUBMITTED));
     }
 }
