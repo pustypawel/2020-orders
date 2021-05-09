@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @EqualsAndHashCode
-class Position {
+public class Position {
     private final Integer quantity;
     private final Product product;
 
@@ -36,5 +36,13 @@ class Position {
         return positions.stream()
                 .map(Position::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Product getProduct() {
+        return product;
     }
 }

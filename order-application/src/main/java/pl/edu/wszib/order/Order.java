@@ -24,8 +24,16 @@ public class Order {
         return new OrderDto(id, Position.toDto(positions), status);
     }
 
-    String getId() {
+    public String getId() {
         return id;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
     }
 
     static Order create(OrderDto orderDto) {
@@ -73,4 +81,5 @@ public class Order {
         }
         return Either.right(new Order(this.id, this.positions, OrderStatus.SUBMITTED));
     }
+
 }
