@@ -39,4 +39,8 @@ public class ProductEntity {
     void setPosition(PositionEntity position) {
         this.position = position;
     }
+
+    public Product toDomain() {
+        return new Product(name, price);
+    }
 }

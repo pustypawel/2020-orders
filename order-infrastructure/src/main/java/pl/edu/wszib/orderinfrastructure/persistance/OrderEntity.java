@@ -1,11 +1,12 @@
 package pl.edu.wszib.orderinfrastructure.persistance;
 
+import org.hibernate.annotations.NaturalId;
 import pl.edu.wszib.order.Order;
 import pl.edu.wszib.order.OrderStatus;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ORDERS")
@@ -15,6 +16,7 @@ public class OrderEntity {
     private Long id;
 
     @Column(unique = true)
+    @NaturalId
     private String publicId;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "order", orphanRemoval = true)
@@ -23,8 +25,6 @@ public class OrderEntity {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
-
-//    @OneToOne
 
     protected OrderEntity() {
         // for JPA
@@ -50,7 +50,19 @@ public class OrderEntity {
     }
 
     Order toDomain() {
-        //FIXME impl!
-        return null;
+        return new Order(publicId, PositionEntity.toDomain(positions), status);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderEntity that = (OrderEntity) o;
+        return publicId.equals(that.publicId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(publicId);
     }
 }

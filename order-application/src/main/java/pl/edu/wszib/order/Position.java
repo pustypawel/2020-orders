@@ -11,8 +11,8 @@ public class Position {
     private final Integer quantity;
     private final Product product;
 
-    Position(final Integer quantity,
-             final Product product) {
+    public Position(final Integer quantity,
+                    final Product product) {
         this.quantity = quantity;
         this.product = product;
     }

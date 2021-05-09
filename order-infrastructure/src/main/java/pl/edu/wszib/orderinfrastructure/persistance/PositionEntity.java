@@ -50,4 +50,14 @@ public class PositionEntity {
     void setOrder(OrderEntity order) {
         this.order = order;
     }
+
+    static List<Position> toDomain(List<PositionEntity> positions) {
+        return positions.stream()
+                .map(PositionEntity::toDomain)
+                .collect(Collectors.toList());
+    }
+
+    Position toDomain() {
+        return new Position(quantity, product.toDomain());
+    }
 }

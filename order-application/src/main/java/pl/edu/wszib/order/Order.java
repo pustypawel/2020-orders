@@ -12,9 +12,9 @@ public class Order {
     private final List<Position> positions;
     private final OrderStatus status;
 
-    Order(final String id,
-          final List<Position> positions,
-          final OrderStatus status) {
+    public Order(final String id,
+                 final List<Position> positions,
+                 final OrderStatus status) {
         this.id = id;
         this.positions = positions;
         this.status = status;
