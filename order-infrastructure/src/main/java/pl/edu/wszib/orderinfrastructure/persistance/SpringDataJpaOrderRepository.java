@@ -42,20 +42,20 @@ public class SpringDataJpaOrderRepository implements OrderRepository {
         return null;
     }
 
-    //TODO [TASK] zaimplementować żeby działało poprawnie
     //TODO remove
     public <TOut> TOut execute3(Supplier<TOut> executable) {
         DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setName("SomeTxName");
+        def.setName(getClass() + "execute3");
         def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-
         TransactionStatus status = transactionManager.getTransaction(def);
-        if (true) {
+        try {
+            TOut tOut = executable.get();
             transactionManager.commit(status);
-        } else {
+            return tOut;
+        } catch (RuntimeException e) {
             transactionManager.rollback(status);
+            throw e;
         }
-        return null;
     }
 
     @Override
