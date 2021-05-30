@@ -6,16 +6,20 @@ import lombok.AllArgsConstructor;
 import pl.edu.wszib.order.dto.OrderDto;
 import pl.edu.wszib.order.dto.PositionDto;
 
-import javax.swing.*;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+//TODO [TASK] zaimplementować obsługę transakcyjności w reszcie metod
 @AllArgsConstructor
 public class OrderFacade {
     private final OrderRepository orderRepository;
 
     public Either<OrderFailure, OrderDto> create(final OrderDto orderDto) {
+        return orderRepository.execute(() -> doCreate(orderDto));
+    }
+
+    private Either<OrderFailure, OrderDto> doCreate(OrderDto orderDto) {
         final String id = orderDto.getId();
         if (orderRepository.exists(id)) {
             return Either.left(OrderFailure.alreadyExist(id));
@@ -30,6 +34,7 @@ public class OrderFacade {
         return Option.ofOptional(orderRepository.get(id))
                 .toEither(() -> OrderFailure.notFound(id))
                 .flatMap(order -> order.update(orderDto))
+                .map(orderRepository::save)
                 .map(Order::toDto);
     }
 
