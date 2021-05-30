@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//TODO [TASK] zaimplementować obsługę transakcyjności w reszcie metod
 @AllArgsConstructor
 public class OrderFacade {
     private final OrderRepository orderRepository;
@@ -30,6 +29,10 @@ public class OrderFacade {
     }
 
     public Either<OrderFailure, OrderDto> update(final OrderDto orderDto) {
+        return orderRepository.execute(() -> doUpdate(orderDto));
+    }
+
+    private Either<OrderFailure, OrderDto> doUpdate(OrderDto orderDto) {
         final String id = orderDto.getId();
         return Option.ofOptional(orderRepository.get(id))
                 .toEither(() -> OrderFailure.notFound(id))
@@ -40,6 +43,10 @@ public class OrderFacade {
 
     public Either<OrderFailure, OrderDto> addPosition(final String id,
                                                       final PositionDto position) {
+        return orderRepository.execute(() -> doAddPosition(id, position));
+    }
+
+    private Either<OrderFailure, OrderDto> doAddPosition(String id, PositionDto position) {
         return Option.ofOptional(orderRepository.get(id))
                 .toEither(() -> OrderFailure.notFound(id))
                 .flatMap(order -> order.addPosition(position))
@@ -49,6 +56,10 @@ public class OrderFacade {
 
     public Either<OrderFailure, OrderDto> removePosition(final String id,
                                                          final Integer positionNumber) {
+        return orderRepository.execute(() -> doRemovePosition(id, positionNumber));
+    }
+
+    private Either<OrderFailure, OrderDto> doRemovePosition(String id, Integer positionNumber) {
         return Option.ofOptional(orderRepository.get(id))
                 .toEither(() -> OrderFailure.notFound(id))
                 .flatMap(order -> order.removePosition(positionNumber))
@@ -57,6 +68,10 @@ public class OrderFacade {
     }
 
     public Either<OrderFailure, OrderDto> submit(final String id) {
+        return orderRepository.execute(() -> doSubmit(id));
+    }
+
+    private Either<OrderFailure, OrderDto> doSubmit(String id) {
         return Option.ofOptional(orderRepository.get(id))
                 .toEither(() -> OrderFailure.notFound(id))
                 .flatMap(Order::submit)
