@@ -29,6 +29,11 @@
         </dependency>
 
         <dependency>
+            <groupId>pl.edu.wszib</groupId>
+            <artifactId>order-api</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <scope>test</scope>

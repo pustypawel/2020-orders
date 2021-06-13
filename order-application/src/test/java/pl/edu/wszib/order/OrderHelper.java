@@ -1,6 +1,6 @@
 package pl.edu.wszib.order;
 
-import pl.edu.wszib.order.dto.OrderDto;
+import pl.edu.wszib.order.api.OrderDto;
 
 public class OrderHelper {
     private final OrderFacade orderFacade;

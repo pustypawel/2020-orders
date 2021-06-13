@@ -1,8 +1,9 @@
 package pl.edu.wszib.order;
 
-import pl.edu.wszib.order.dto.OrderDto;
-import pl.edu.wszib.order.dto.PositionDto;
-import pl.edu.wszib.order.dto.ProductDto;
+import pl.edu.wszib.order.api.OrderDto;
+import pl.edu.wszib.order.api.OrderStatus;
+import pl.edu.wszib.order.api.PositionDto;
+import pl.edu.wszib.order.api.ProductDto;
 
 import java.math.BigDecimal;
 import java.util.List;

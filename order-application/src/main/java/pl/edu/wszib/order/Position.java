@@ -1,7 +1,7 @@
 package pl.edu.wszib.order;
 
 import lombok.EqualsAndHashCode;
-import pl.edu.wszib.order.dto.PositionDto;
+import pl.edu.wszib.order.api.PositionDto;
 
 import java.util.List;
 import java.util.stream.Collectors;

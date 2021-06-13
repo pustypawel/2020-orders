@@ -64,7 +64,6 @@
 		<dependency>
 			<groupId>pl.edu.wszib</groupId>
 			<artifactId>order-application</artifactId>
-			<version>0.0.1-SNAPSHOT</version>	<!-- TODO version management -->
 		</dependency>
 
 		<dependency>

@@ -2,7 +2,7 @@ package pl.edu.wszib.orderinfrastructure.persistance;
 
 import org.hibernate.annotations.NaturalId;
 import pl.edu.wszib.order.Order;
-import pl.edu.wszib.order.OrderStatus;
+import pl.edu.wszib.order.api.OrderStatus;
 
 import javax.persistence.*;
 import java.util.List;

@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.wszib.order.OrderFacade;
-import pl.edu.wszib.order.dto.OrderDto;
-import pl.edu.wszib.order.dto.PositionDto;
+import pl.edu.wszib.order.api.OrderDto;
+import pl.edu.wszib.order.api.PositionDto;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -16,18 +16,15 @@ import java.util.Optional;
 @RequestMapping("/api/orders")
 @AllArgsConstructor
 public class OrderController {
+    private final OrderFacade orderFacade;
+
     @GetMapping
     public Collection<OrderDto> getAll() {
-        System.out.println("IsTransaction: " + TransactionSynchronizationManager.isActualTransactionActive());
         return orderFacade.getAll();
     }
 
-    private final OrderFacade orderFacade;
-
     @GetMapping("/{orderId}")
     public Optional<OrderDto> get(final @PathVariable String orderId) {
-        System.out.println("IsTransaction: " + TransactionSynchronizationManager.isActualTransactionActive());
-
         return orderFacade.get(orderId);
     }
 

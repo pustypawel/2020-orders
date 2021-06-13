@@ -3,8 +3,8 @@ package pl.edu.wszib.order;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pl.edu.wszib.order.dto.OrderDto;
-import pl.edu.wszib.order.dto.PositionDto;
+import pl.edu.wszib.order.api.OrderDto;
+import pl.edu.wszib.order.api.PositionDto;
 
 import java.util.Optional;
 

@@ -1,4 +1,4 @@
-package pl.edu.wszib.order;
+package pl.edu.wszib.order.api;
 
 public enum OrderStatus {
     DRAFT,

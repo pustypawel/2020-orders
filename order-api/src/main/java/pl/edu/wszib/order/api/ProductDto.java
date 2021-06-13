@@ -1,4 +1,4 @@
-package pl.edu.wszib.order.dto;
+package pl.edu.wszib.order.api;
 
 import lombok.Value;
 

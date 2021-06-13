@@ -1,7 +1,6 @@
-package pl.edu.wszib.order.dto;
+package pl.edu.wszib.order.api;
 
 import lombok.Value;
-import pl.edu.wszib.order.OrderStatus;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;

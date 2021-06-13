@@ -1,8 +1,9 @@
 package pl.edu.wszib.order;
 
 import io.vavr.control.Either;
-import pl.edu.wszib.order.dto.OrderDto;
-import pl.edu.wszib.order.dto.PositionDto;
+import pl.edu.wszib.order.api.OrderDto;
+import pl.edu.wszib.order.api.OrderStatus;
+import pl.edu.wszib.order.api.PositionDto;
 
 import java.util.ArrayList;
 import java.util.List;

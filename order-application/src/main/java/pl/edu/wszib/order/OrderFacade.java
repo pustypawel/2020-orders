@@ -3,8 +3,8 @@ package pl.edu.wszib.order;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import lombok.AllArgsConstructor;
-import pl.edu.wszib.order.dto.OrderDto;
-import pl.edu.wszib.order.dto.PositionDto;
+import pl.edu.wszib.order.api.OrderDto;
+import pl.edu.wszib.order.api.PositionDto;
 
 import java.util.Collection;
 import java.util.Optional;

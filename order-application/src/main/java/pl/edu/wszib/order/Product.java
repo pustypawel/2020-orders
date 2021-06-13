@@ -1,7 +1,7 @@
 package pl.edu.wszib.order;
 
 import lombok.EqualsAndHashCode;
-import pl.edu.wszib.order.dto.ProductDto;
+import pl.edu.wszib.order.api.ProductDto;
 
 import java.math.BigDecimal;
 
