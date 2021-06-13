@@ -34,6 +34,11 @@
 			</dependency>
 			<dependency>
 				<groupId>pl.edu.wszib</groupId>
+				<artifactId>order-client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>pl.edu.wszib</groupId>
 				<artifactId>order-application</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -49,6 +54,7 @@
 		<module>order-application</module>
 		<module>order-infrastructure</module>
         <module>order-api</module>
-    </modules>
+		<module>order-client</module>
+	</modules>
 
 </project>

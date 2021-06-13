@@ -1,5 +1,7 @@
 package pl.edu.wszib.order.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 
 import javax.validation.Valid;
@@ -13,4 +15,11 @@ public class PositionDto {
     @NotNull
     @Valid
     ProductDto product;
+
+    @JsonCreator
+    public PositionDto(@JsonProperty("quantity") Integer quantity,
+                       @JsonProperty("product") ProductDto product) {
+        this.quantity = quantity;
+        this.product = product;
+    }
 }
