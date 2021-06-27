@@ -30,34 +30,6 @@ public class SpringDataJpaOrderRepository implements OrderRepository {
         return tOut;
     }
 
-    //TODO remove
-    public <TOut> TOut execute2(Supplier<TOut> executable) {
-        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
-        transactionTemplate.execute(new TransactionCallback<Object>() {
-            @Override
-            public Object doInTransaction(TransactionStatus status) {
-                return null;
-            }
-        });
-        return null;
-    }
-
-    //TODO remove
-    public <TOut> TOut execute3(Supplier<TOut> executable) {
-        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-        def.setName(getClass() + "execute3");
-        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        TransactionStatus status = transactionManager.getTransaction(def);
-        try {
-            TOut tOut = executable.get();
-            transactionManager.commit(status);
-            return tOut;
-        } catch (RuntimeException e) {
-            transactionManager.rollback(status);
-            throw e;
-        }
-    }
-
     @Override
     public boolean exists(String id) {
         return orderDao.existsByPublicId(id);

@@ -1,7 +1,6 @@
 package pl.edu.wszib.orderinfrastructure.rest;
 
 import lombok.AllArgsConstructor;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.wszib.order.OrderFacade;
 import pl.edu.wszib.order.api.OrderDto;
@@ -29,7 +28,7 @@ public class OrderController {
     }
 
     @PostMapping("{orderId}/submit")
-    public OrderDto update(final @PathVariable String orderId) {
+    public OrderDto submit(final @PathVariable String orderId) {
         return orderFacade.submit(orderId)
                 .get(); //TODO Either.left obsługa
     }
@@ -53,8 +52,8 @@ public class OrderController {
     }
 
     @DeleteMapping("{orderId}/positions/{positionNumber}")
-    public OrderDto addPosition(final @PathVariable String orderId,
-                                final @PathVariable Integer positionNumber) {
+    public OrderDto removePosition(final @PathVariable String orderId,
+                                   final @PathVariable Integer positionNumber) {
         return orderFacade.removePosition(orderId, positionNumber)
                 .get(); //TODO Either.left obsługa
     }

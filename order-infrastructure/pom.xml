@@ -70,6 +70,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>pl.edu.wszib</groupId>
+			<artifactId>order-client</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
