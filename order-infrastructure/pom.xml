@@ -40,6 +40,10 @@
 <!--			<groupId>org.springframework.boot</groupId>-->
 <!--			<artifactId>spring-boot-starter-jetty</artifactId>-->
 <!--		</dependency>-->
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>logbook-spring-boot-starter</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.liquibase</groupId>

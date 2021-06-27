@@ -15,3 +15,11 @@ myProperty: myTestProperty
 testconfig:
   my-property2: dsa
   my-property1: asd
+
+
+logging:
+  level:
+    org.zalando.logbook: TRACE
+logbook:
+  format:
+    style: http
