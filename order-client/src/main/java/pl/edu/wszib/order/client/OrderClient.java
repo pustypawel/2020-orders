@@ -2,6 +2,8 @@ package pl.edu.wszib.order.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
+import org.zalando.logbook.Logbook;
+import org.zalando.logbook.okhttp.LogbookInterceptor;
 import pl.edu.wszib.order.api.OrderDto;
 import pl.edu.wszib.order.api.PositionDto;
 
@@ -12,7 +14,10 @@ public interface OrderClient {
 
     static OrderClient create(final OrderClientConfig config) {
         final ObjectMapper objectMapper = new ObjectMapper();
-        final OkHttpClient okHttpClient = new OkHttpClient();
+        final Logbook logbook = Logbook.builder().build();
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addNetworkInterceptor(new LogbookInterceptor(logbook))
+                .build();
         return new DefaultOrderClient(config, okHttpClient, objectMapper);
     }
 

@@ -25,8 +25,23 @@
             <artifactId>okhttp</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-core</artifactId>
+            <version>${logbook.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-okhttp</artifactId>
+            <version>${logbook.version}</version>
+        </dependency>
+        <dependency>
             <groupId>pl.edu.wszib</groupId>
             <artifactId>order-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
